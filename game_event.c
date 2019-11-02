@@ -1,6 +1,6 @@
 //Programa de controle de stands de jogos em um evento de video games.
 //Autores: Douglas Henrique de Souza Pereira|João Victor de Souza Portella.
-//Matrículas: UC19107076|          .
+//Matrículas: UC19107076|UC19100100.
 //Instituição de Ensino: Universidade Católica de Brasília.
 //Data: 02 de Novembro de 2019.
 #include <stdlib.h>
