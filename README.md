@@ -1,1 +1,1 @@
-# Controle de evento de games,
+# Controle de evento de games.
