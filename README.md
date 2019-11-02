@@ -1,1 +1,1 @@
-# game_event
+# Controle de evento de games,
