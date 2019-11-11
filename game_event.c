@@ -8,8 +8,6 @@
 #include <string.h>
 #include <locale.h>
 
-#define ESC '27'
-
 typedef struct{
 	int totalRPG;
 	int totalFPS;
@@ -49,10 +47,11 @@ void restore();
 void vagas();
 void sobre();
 void acessar();
+void leValidaEmail(FILE *, char []);
 
 int main(void){
 	char escolha;
-	
+
 	system("cls");
 	do{
 		printf("\n\t\t\t\t\t UCBG - UNIVERSIDADE CATOLICA DE BRASILIA GAMES");
@@ -121,7 +120,7 @@ void menu_participantes(){
 				sobre();
 			case '5':
 				main();
-				break;		
+				break;
 		}
 	}while(opcao != '0');
 }
@@ -132,7 +131,7 @@ void menu_organizadores(){
 	Stands total;
 	FILE *arqEMP;
 	organizadores empresas;
-	
+
 	arqEMP = fopen("organizadores.dat", "ab+");
 	printf("\n\t%c DIGITE [S] SE JA E CADASTRADO E QUALQUER OUTRA TECLA SE NAO E %c ", 254, 175);
 	resp = getchar();
@@ -145,11 +144,11 @@ void menu_organizadores(){
 				if(tentativa != empresas.senha){
 					printf("\n\t\t\t\t\t\t    SENHA INVALIDA!");
 					flag = 1;
-					Sleep(800);		
+					Sleep(800);
 				}
 			}while(empresas.senha != tentativa);
 	}else
-		cad_empresas();	
+		cad_empresas();
 	do{
 		system("cls");
 		printf("\n\n\n\n\n\n\n\n");
@@ -190,7 +189,7 @@ void menu_organizadores(){
 				break;
 			case '4':
 				main();
-				break;	
+				break;
 		}
 	}while(opcao != '0');
 	fclose(arqEMP);
@@ -202,8 +201,17 @@ void menu_patrocinadores() {
 
 void stands(Stands tipo){
 	system("cls");
-	printf("\n\t\t\t\t\t\t\tSTANDS");
-	printf("\n\tPRESSIONE UMA TECLA PARA CONTINUAR...");
+	printf("\n\t\t\t\t\t\t\tSTANDS\n");
+	printf("\n\t\t\t\t\tษออออออออออออหออออออออออออหออออออออออออ%c", 187);
+	printf("\n\t\t\t\t\tบ    FPS     บ    RPG     บ    ESP     บ");
+	printf("\n\t\t\t\t\tบ            บ            บ            บ");
+	printf("\n\t\t\t\t\tบ  vagas =   บ  vagas =   บ  vagas =   บ");
+	printf("\n\t\t\t\t\tฬออออออออออออฮออออออออออออฮออออออออออออ%c", 185);
+	printf("\n\t\t\t\t\tบ    AVE     บ    LUT     บ    COR     บ");
+	printf("\n\t\t\t\t\tบ            บ            บ            บ");
+	printf("\n\t\t\t\t\tบ  total =   บ  vagas =   บ  vagas =   บ");
+	printf("\n\t\t\t\t\tศออออออออออออสออออออออออออสออออออออออออผ");
+	printf("\n\n\t\t\t\t\t PRESSIONE UMA TECLA PARA CONTINUAR...");
 	getch();
 }
 
@@ -247,42 +255,39 @@ void cad_participantes(Stands tipo){
 		gets(participante.nome);
 		strcpy(nome, participante.nome);
 		printf("\n\t%c OLA, %s", 254, nome, ".");
-		do{
-			printf("\n\t%c ENDERECO DE E-MAIL %c ", 254, 175);
-			fflush(stdin);
-			gets(email);
-			while(fread(&participante, sizeof(participante), 1, arqPAR)){
-				if(strcmp(email, participante.email) == 0){
-					printf("\n\tE-MAIL JA CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
-					flag = 1;
-				}
-			}
-		}while(flag == 1);
+		leValidaEmail(arqPAR, &email);
 		strcpy(participante.email, email);
 		do{
 			stands(tipo);
 			printf("\n\n\t%c ESCOLHA O STAND DE JOGO QUE DESEJA PARTICIPAR %c ", 254, 175);
+			fflush(stdin);
 			participante.stand = getchar();
 			participante.stand = toupper(participante.stand);
-		}while(participante.stand != 'R' && participante.stand != 'F' && participante.stand != 'A' && participante.stand != 'E' && participante.stand != 'L' && participante.stand != 'C');	
+			if(participante.stand != 'R' && participante.stand != 'F' && participante.stand != 'A' && participante.stand != 'E' && participante.stand != 'L' && participante.stand != 'C'){
+                printf("\n\t\t\t\t\t\t  OPCAO INVALIDA!");
+                Sleep(800);
+			}
+		}while(participante.stand != 'R' && participante.stand != 'F' && participante.stand != 'A' && participante.stand != 'E' && participante.stand != 'L' && participante.stand != 'C');
 			switch(participante.stand){
 				case 'R':
-					
+						tipo.totalRPG++;
+						printf("\n%d", tipo.totalRPG);
+						getch();
 					break;
 				case 'F':
-				
+
 					break;
 				case 'C':
-					
+
 					break;
 				case 'L':
-					
+
 					break;
 				case 'E':
-					
+
 					break;
 				case 'A':
-					
+
 					break;
 			}
 		fwrite(&participante, sizeof(participante), 1, arqPAR);
@@ -295,14 +300,14 @@ void cad_participantes(Stands tipo){
 
 void cad_empresas(){
 	FILE *arqEMP;
+	char email[150];
 	organizadores empresa;
 	arqEMP = fopen("organizadores.dat", "ab");
 	printf("\n\t%c NOME DA EMPRESA ORGANIZADORA %c ", 254, 175);
 	fflush(stdin);
 	gets(empresa.nome);
-	printf("\n\t%c E-MAIL %c ", 254, 175);
-	fflush(stdin);
-	gets(empresa.email);
+	leValidaEmail(arqEMP, email);
+	strcpy(empresa.email, email);
 	empresa.senha = 1414;
 	printf("\n\t%c SENHA DE ACESSO PARA INFORMACOES DO EVENTO %c %d", 254, 175, empresa.senha);
 	fwrite(&empresa, sizeof(empresa), 1, arqEMP);
@@ -311,7 +316,7 @@ void cad_empresas(){
 }
 
 void cad_patrocinadores(){
-	
+
 	FILE *arqPAT;
 }
 
@@ -320,7 +325,7 @@ void acessar(){
 	gamers participante;
 	int flag = 0;
 	char email[150];
-	
+
 	arqPAR = fopen("cadastro_partcipante.dat", "rb");
 	system("cls");
 	do{
@@ -337,8 +342,27 @@ void acessar(){
 		}
 		if(flag == 1)
 			printf("\n\tE-MAIL NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
-		getch();	
-		menu_participantes();	
+		getch();
+		menu_participantes();
 	}while(flag == 1);
 	fclose(arqPAR);
+}
+
+void leValidaEmail(FILE *arq, char email[]){
+	gamers participante;
+	int flag = 0;
+
+	arq = fopen("cadastro_partcipante.dat", "rb");
+	do{
+		printf("\n\t%c ENDERECO DE E-MAIL %c ", 254, 175);
+		fflush(stdin);
+		gets(email);
+		while(fread(&participante, sizeof(participante), 1, arq)){
+			if(strcmp(email, participante.email) == 0){
+				printf("\n\tE-MAIL JA CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
+				flag = 1;
+			}
+		}
+	}while(flag == 1);
+	fclose(arq);
 }
