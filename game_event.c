@@ -1,21 +1,12 @@
 //Programa de controle de stands de jogos em um evento de video games.
-//Autores: Douglas Henrique de Souza Pereira|JoÃƒÂ£o Victor de Souza Portella.
-//MatrÃƒÂ­culas: UC19107076|UC19100100.
-//InstituiÃƒÂ§ÃƒÂ£o de Ensino: Universidade CatÃƒÂ³lica de BrasÃƒÂ­lia.
+//Autores: Douglas Henrique de Souza Pereira|João Victor de Souza Portella.
+//Matrículas: UC19107076|UC19100100.
+//Instituição de Ensino: Universidade Católica de Brasília.
 //Data: 02 de Novembro de 2019.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
-
-typedef struct{
-	int totalRPG;
-	int totalFPS;
-	int totalESP;
-	int totalCOR;
-	int totalLUT;
-	int totalAVE;
-}Stands;
 
 typedef struct{
 	char nome[100];
@@ -26,7 +17,7 @@ typedef struct{
 typedef struct{
 	char nome[100];
 	char stand;
-	char email[150];
+	char usuario[50];
 }gamers;
 
 typedef struct{
@@ -35,19 +26,28 @@ typedef struct{
 	float quantia;
 }patrocinadores;
 
+//Menus
 void menu_participantes();
 void menu_organizadores();
 void menu_patrocinadores();
+//Cadastros
 void cad_empresas();
-void cad_participantes(Stands);
+void cad_participantes();
 void cad_patrocinadores();
-void stands(Stands);
+//Possibilidades no menu de participantes
+void stands();
+void sobre();
+//Possibilidades no menu de organizadores
 void backup();
 void restore();
 void vagas();
-void sobre();
-void acessar();
-void leValidaEmail(FILE *, char []);
+//Alteracao de dados de participantes
+void acessar_dados();
+void alterar_dados();
+//Funcoes de validacao
+void leValidaUsuario(char []);
+char leValidaStand();
+void leValidaNome(char []);
 
 int main(void){
 	char escolha;
@@ -60,16 +60,17 @@ int main(void){
 		printf("\n\t\t\t\t\t\t\t%c [1]PARTICIPANTE", 254);
 		printf("\n\t\t\t\t\t\t\t%c [2]EMPRESA", 254);
 		printf("\n\t\t\t\t\t\t\t%c [3]PATROCINADOR", 254);
+		printf("\n\t\t\t\t\t\t\t%c [4]SOBRE O EVENTO", 254);
 		printf("\n\t\t\t\t\t\t\t%c [0]SAIR DO PROGRAMA", 254);
 		printf("\n\n\t\t\t\t\t          %c APERTE A RESPECTIVA OPCAO %c ", 254, 175);
 		escolha = getch();
 		escolha = toupper(escolha);
-		if(escolha != '1' && escolha != '2' && escolha != '3' && escolha != '0'){
+		if(escolha != '1' && escolha != '2' && escolha != '3' && escolha != '4' && escolha != '0'){
 			printf("\n\t\t\t\t\t\t\tCARACTER INVALIDO!");
 			Sleep(800);
 		}
 		system("cls");
-	}while(escolha != '1' && escolha != '2' && escolha != '3' && escolha != '0');
+	}while(escolha != '1' && escolha != '2' && escolha != '3' && escolha != '4'&& escolha != '0');
 
 	switch(escolha){
 		case '1':
@@ -81,12 +82,15 @@ int main(void){
 		case '3':
 			menu_patrocinadores();
 			break;
+		case '4':
+			sobre();
+			break;
 	}
 }
 
 void menu_participantes(){
 	int opcao;
-	Stands tipo;
+	
 	do{
 		system("cls");
 		printf("\n\n\n\n\n\n\n");
@@ -94,30 +98,31 @@ void menu_participantes(){
 		printf("                                  º                                                   º\n");
 		printf("                                  º                   %c 1[CADASTRAR]                  º\n", 254);
 		printf("                                  º                   %c 2[ACESSAR]                    º\n", 254);
-		printf("                                  º                   %c 3[STANDS]                     º\n", 254);
-		printf("                                  º                   %c 4[SOBRE O EVENTO]             º\n", 254);
+		printf("                                  º                   %c 3[ALTERAR DADOS]              º\n", 254);
+		printf("                                  º                   %c 4[STANDS]                     º\n", 254);
 		printf("                                  º                   %c 5[VOLTAR AO INICIO]           º\n", 254);
 		printf("                                  º                   %c 0[FECHAR]                     º\n", 254);
 		printf("                                  º                                                   º\n");
 		printf("                                  ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ%c", 188);
 		printf("\n\t\t\t\t\t\t\t%c OPCAO %c ", 254, 175);
 		opcao = getch();
-		if(opcao != '1' && opcao != '2' && opcao != '3' && opcao != '4' && opcao != '5' &&opcao != '0'){
+		if(opcao != '1' && opcao != '2' && opcao != '3' && opcao != '4' && opcao != '5' && opcao != '6'&&opcao != '0'){
 			printf("\n\t\t\t\t\t\t      OPCAO INVALIDA!");
 			Sleep(800);
 		}
 		switch(opcao){
 			case '1':
-				cad_participantes(tipo);
+				cad_participantes();
 				break;
 			case '2':
-				acessar();
+				acessar_dados();
 				break;
 			case '3':
-				stands(tipo);
+				alterar_dados();
 				break;
 			case '4':
-				sobre();
+				stands();
+				break;
 			case '5':
 				main();
 				break;
@@ -127,8 +132,7 @@ void menu_participantes(){
 
 void menu_organizadores(){
 	int opcao, tentativa, flag;
-		char resp;
-	Stands total;
+	char resp;
 	FILE *arqEMP;
 	organizadores empresas;
 
@@ -199,7 +203,7 @@ void menu_patrocinadores() {
 	printf("NOME DA EMPRESA>> ");
 }
 
-void stands(Stands tipo){
+void stands(){
 	system("cls");
 	printf("\n\t\t\t\t\t\t\tSTANDS\n");
 	printf("\n\t\t\t\t\tÉÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÍÍÍÍÍËÍÍÍÍÍÍÍÍÍÍÍÍ%c", 187);
@@ -233,63 +237,58 @@ void vagas(){
 
 void sobre(){
 	system("cls");
-	printf("\n\t\t\t\t\t\t\tSOBRE O EVENTO");
-	printf("\n");
-	printf("\n\tPRESSIONE UMA TECLA PARA CONTINUAR...");
+	printf("\n\t\t\t\t\t\t\tSOBRE O EVENTO\n");
+	printf("\n\t%c EVENTO DE GAMES PARA A COMUNIDADE DE ALUNOS DA UCB E ENTORNO.\n", 254);
+	printf("\n\t%c QUALQUER ALUNO DE QUALQUER CURSO PODE PARTICIPAR.\n", 254);
+	printf("\n\t%c OS PATROCINADORES PODEM SE CADASTRAR E ANALISAREMOS O CADASTRO.\n", 254);
+	printf("\n\t%c AS EMPRESAS QUE DESEJAM SER ORGANIZADORAS DO EVENTO DEVEM FAZER O CADASTRO.\n", 254);
+	printf("\n\t%c O EVENTO CONTERÁ 6 STANDS DE JOGOS, SENDO ELES: RPG, FPS, LUTA, CORRIDA, AVENTURA E ESPORTES.\n", 254);
+	printf("\n\t%c CADA PARTICIPANTE PODE ESCOLHER APENAS UM STAND.\n", 254);
+	printf("\n\t%c ", 254);
+	printf("\n\n\tPRESSIONE UMA TECLA PARA CONTINUAR...");
 	getch();
+	main();
 }
 
-void cad_participantes(Stands tipo){
+void cad_participantes(){
 	gamers participante;
 	FILE *arqPAR;
-	char email[150], nome[100];
-	int flag = 0,cheio = 0;
+	char user[50], nome[100];
+	int flag = 0, cheio = 0, total_stands[6];
 
 	system("cls");
-	arqPAR = fopen("cadastro_partcipante.dat", "ab+");
+	arqPAR = fopen("cadastro_participantes.dat", "ab+");
 	do{
+		cheio = 0;
 		printf("\n\t\t\t\t\t\t\tCADASTRAR");
 		printf("\n");
 		printf("\n\t%c BEM-VINDO, GAMER. DIGITE SEU NOME %c ", 254, 175);
 		fflush(stdin);
-		gets(participante.nome);
-		strcpy(nome, participante.nome);
-		printf("\n\t%c OLA, %s", 254, nome, ".");
-		leValidaEmail(arqPAR, &email);
-		strcpy(participante.email, email);
-		do{
-			stands(tipo);
-			printf("\n\n\t%c ESCOLHA O STAND DE JOGO QUE DESEJA PARTICIPAR %c ", 254, 175);
-			fflush(stdin);
-			participante.stand = getchar();
-			participante.stand = toupper(participante.stand);
-			if(participante.stand != 'R' && participante.stand != 'F' && participante.stand != 'A' && participante.stand != 'E' && participante.stand != 'L' && participante.stand != 'C'){
-                printf("\n\t\t\t\t\t\t  OPCAO INVALIDA!");
-                Sleep(800);
-			}
-		}while(participante.stand != 'R' && participante.stand != 'F' && participante.stand != 'A' && participante.stand != 'E' && participante.stand != 'L' && participante.stand != 'C');
-			switch(participante.stand){
-				case 'R':
-						tipo.totalRPG++;
-						printf("\n%d", tipo.totalRPG);
-						getch();
-					break;
-				case 'F':
-
-					break;
-				case 'C':
-
-					break;
-				case 'L':
-
-					break;
-				case 'E':
-
-					break;
-				case 'A':
-
-					break;
-			}
+		leValidaNome(participante.nome);
+		printf("\n\t%c OLA, %s.", 254, participante.nome);
+		leValidaUsuario(user);
+		strcpy(participante.usuario, user);
+		participante.stand = leValidaStand();
+		switch(participante.stand){
+			case 'R':
+				total_stands[0]++;
+				break;
+			case 'F':
+				total_stands[1]++;
+				break;
+			case 'C':
+				total_stands[2]++;
+				break;
+			case 'L':
+				total_stands[3]++;
+				break;
+			case 'E':
+				total_stands[4]++;
+				break;
+			case 'A':
+				total_stands[5]++;
+				break;
+		}
 		fwrite(&participante, sizeof(participante), 1, arqPAR);
 		fclose(arqPAR);
 		printf("\n\tCADASTRO REALIZADO COM SUCESSO!");
@@ -302,12 +301,11 @@ void cad_empresas(){
 	FILE *arqEMP;
 	char email[150];
 	organizadores empresa;
+	
 	arqEMP = fopen("organizadores.dat", "ab");
 	printf("\n\t%c NOME DA EMPRESA ORGANIZADORA %c ", 254, 175);
 	fflush(stdin);
 	gets(empresa.nome);
-	leValidaEmail(arqEMP, email);
-	strcpy(empresa.email, email);
 	empresa.senha = 1414;
 	printf("\n\t%c SENHA DE ACESSO PARA INFORMACOES DO EVENTO %c %d", 254, 175, empresa.senha);
 	fwrite(&empresa, sizeof(empresa), 1, arqEMP);
@@ -320,49 +318,124 @@ void cad_patrocinadores(){
 	FILE *arqPAT;
 }
 
-void acessar(){
-	FILE *arqPAR;
+void acessar_dados(){
+	FILE *arq;
 	gamers participante;
 	int flag = 0;
-	char email[150];
-
-	arqPAR = fopen("cadastro_partcipante.dat", "rb");
+	char user[50];
+	
+	arq = fopen("cadastro_participantes.dat", "rb");
 	system("cls");
 	do{
-		printf("\n\t%c DIGITE SEU EMAIL %c ", 254, 175);
+		flag = 0;
+		printf("\n\t%c DIGITE SEU USUARIO %c ", 254, 175);
 		fflush(stdin);
-		gets(email);
-		while(fread(&participante, sizeof(participante), 1, arqPAR)){
-			if(strcmp(email, participante.email) > 0){
+		gets(user);
+		while(fread(&participante, sizeof(participante), 1, arq)){
+			if(strcmp(user, participante.usuario) == 0){
+				printf("\n\t%c USUARIO %c %s", 254, 175, participante.usuario);
 				printf("\n\t%c NOME %c %s", 254, 175, participante.nome);
 				printf("\n\t%c TIPO DE STAND %c %c", 254, 175, participante.stand);
+				getch();
 			}else{
 				flag = 1;
 			}
 		}
 		if(flag == 1)
-			printf("\n\tE-MAIL NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
-		getch();
-		menu_participantes();
+			printf("\n\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
 	}while(flag == 1);
+	fclose(arq);
+}
+
+void alterar_dados(){
+	int op, flag = 0;
+	char stand, user[50];
+	FILE *arqPAR;
+	gamers participante;
+	
+	arqPAR = fopen("cadastro_participantes.dat", "ab+");
+	do{
+		flag = 0;
+		printf("\n\t%c DIGITE SEU USUARIO %c ", 254, 175);
+		fflush(stdin);
+		gets(user);
+		while(fread(&participante, sizeof(participante), 1, arqPAR)){
+			if(strcmp(user, participante.usuario) == 0){
+				printf("\n\t%c USUARIO %c %s", 254, 175, participante.usuario);
+				printf("\n\t%c NOME %c %s", 254, 175, participante.nome);
+				printf("\n\t%c TIPO DE STAND %c %c", 254, 175, participante.stand);
+				getch();
+			}else{
+				flag = 1;
+			}
+		}
+		if(flag == 1)
+			printf("\n\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
+	}while(flag == 1);
+	printf("\n\n\t%c ESCOLHA O QUE DESEJA ALTERAR\n", 254, 175);
+	printf("\n\t%c [1]STAND", 254);
+	printf("\n\t%c [2]USUARIO", 254);
+	printf("\n\t%c OPCAO %c ", 254, 175);
+	scanf("%d", &op);
+	switch(op){
+		case 1:
+			participante.stand = leValidaStand();
+			break;
+		case 2:
+			leValidaUsuario(user);
+			strcpy(participante.usuario, user);
+			break;
+	}
+	fwrite(&participante, sizeof(participante), 1, arqPAR);
 	fclose(arqPAR);
 }
 
-void leValidaEmail(FILE *arq, char email[]){
+void leValidaUsuario(char user[]){
 	gamers participante;
+	FILE *arq;
 	int flag = 0;
-
-	arq = fopen("cadastro_partcipante.dat", "rb");
+	
+	arq = fopen("cadastro_participantes.dat", "rb");
 	do{
-		printf("\n\t%c ENDERECO DE E-MAIL %c ", 254, 175);
+		flag = 0;
+		printf("\n\t%c USUARIO %c ", 254, 175);
 		fflush(stdin);
-		gets(email);
+		leValidaNome(user);
 		while(fread(&participante, sizeof(participante), 1, arq)){
-			if(strcmp(email, participante.email) == 0){
-				printf("\n\tE-MAIL JA CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
+			if(strcmp(user, participante.usuario) == 0){
 				flag = 1;
 			}
+		}
+		if(flag == 1){
+			printf("\n\tUSUARIO JA CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
 		}
 	}while(flag == 1);
 	fclose(arq);
 }
+
+char leValidaStand(){
+	gamers participante;
+	do{
+		stands();
+		printf("\n\n\t%c ESCOLHA O STAND DE JOGO QUE DESEJA PARTICIPAR %c ", 254, 175);
+		fflush(stdin);
+		participante.stand = getchar();
+		participante.stand = toupper(participante.stand);
+		if(participante.stand != 'R' && participante.stand != 'F' && participante.stand != 'A' && participante.stand != 'E' && participante.stand != 'L' && participante.stand != 'C'){
+            printf("\n\t\t\t\t\t\t    OPCAO INVALIDA!");
+            Sleep(800);
+		}
+	}while(participante.stand != 'R' && participante.stand != 'F' && participante.stand != 'A' && participante.stand != 'E' && participante.stand != 'L' && participante.stand != 'C');
+	return participante.stand;
+}
+
+void leValidaNome(char nome[]){
+	do{
+		fflush(stdin);
+		gets(nome);
+		if(strlen(nome) == 0){
+			printf("\n\tDIGITE ALGO!");
+		}
+	}while(strlen(nome) == 0);
+}
+	
