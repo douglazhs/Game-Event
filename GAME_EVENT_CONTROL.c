@@ -51,7 +51,7 @@ void mostra_participantes();
 void mostra_participante(gamers);
 //----- Funcoes para alterar dados ------------------------------------------------------------------------------------------------------------------------------- 
 void alterar_dados_participante();
-void excluir_cadastro();
+void excluir_cadastro_participante();
 void organizar_cads();
 //----- Funcoes de validacao ------------------------------------------------------------------------------------------------------------------------------------- 
 void leValidaUsuario(char []);
@@ -62,13 +62,13 @@ void leValidaEmailOrg(char[]);
 void leValidaEmailPat(char []);
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+//------ MENU PRINCIPAL ----------------------------------------------------------------------------------------------------------------------------------------------
 int main(void){
 	char escolha;
 
 	system("cls");
 	do{
-		printf("\n\t\t\t\t\t UCBG - UNIVERSIDADE CATOLICA DE BRASILIA GAMES\n\n");
+		printf("\n\t\t\t\t\tUCBG - UNIVERSIDADE CATOLICA DE BRASILIA GAMES\n\n");
 		printf("\t\t\t\t\t          @@@                  @@@\n");
 		printf("\t\t\t\t\t        @@@@@@               @@@@@@\n");      
 		printf("\t\t\t\t\t      @@@@ @@@@@@@@@@@@@@@@@@@@ @@@@@\n");  
@@ -102,6 +102,7 @@ int main(void){
 		case '4': menu_patrocinadores(); break;
 	}
 }
+// ------ MENU PARTICIPANTES ----------------------------------------------------------------------------------------------------------------------------------------------
 
 void menu_participantes(){
 	int opcao, pos;
@@ -120,7 +121,7 @@ void menu_participantes(){
 		printf("                                  ศอออออออออออออออออออออออออออออออออออออออออออออออออออ%c", 188);
 		printf("\n\t\t\t\t\t\t\t%c OPCAO %c ", 254, 175);
 		opcao = getch();
-		if(opcao != '1' && opcao != '2' && opcao != '3' && opcao != '4' && opcao != '5' && opcao != '6'){
+		if(opcao != '1' && opcao != '2' && opcao != '3' && opcao != '4' && opcao != '5'){
 			printf("\n\t\t\t\t\t\t      OPCAO INVALIDA!");
 			Sleep(800);
 		}
@@ -133,7 +134,7 @@ void menu_participantes(){
 		}
 	}while(opcao != '5');
 }
-
+// ------ MENU ORGANIZADORES ----------------------------------------------------------------------------------------------------------------------------------------------
 void menu_organizadores(){
 	int opcao, flag;
 	char resp;
@@ -169,40 +170,153 @@ void menu_organizadores(){
 			case '1': mostra_participantes(); break;
 			case '2': stands(); break;
 			case '3': break;
-			case '4': excluir_cadastro(); break;
+			case '4': excluir_cadastro_participante(); break;
 			case '5': break;
 			case '6': main(); break;	
 		}
 	}while(opcao != '6');
 }
-
-void stands(){
+// ------ MENU PATROCINADORES ----------------------------------------------------------------------------------------------------------------------------------------------
+void menu_patrocinadores(){
+	int opcao;
+	do{
+		system("cls");
+		printf("\n\n\n\n\n\n\n\n");
+		printf("\n                                  ษอออออออออออออออออ MENU PATROCINADOR ออออออออออออออออ%c\n", 187);		
+		printf("                                  บ                                                    บ\n");
+		printf("                                  บ                   %c 1[CADASTRAR]                   บ\n", 254);
+		printf("                                  บ                   %c 2[ACESSO A INFORMACOES]        บ\n", 254);
+		printf("                                  บ                   %c 3[VOLTAR AO INICIO]            บ\n", 254);
+		printf("                                  บ                                                    บ\n");
+		printf("                                  ศอออออออออออออออออออออออออออออออออออออออออออออออออออ%c", 188);
+		printf("\n\t\t\t\t\t\t\t%c OPCAO %c", 254, 175);
+		opcao = getch();
+		if(opcao != '1' && opcao != '2' && opcao != '3' && opcao != '4' && opcao != '5' && opcao != '0'){
+			printf("\n\t\t\t\t\t\t      OPCAO INVALIDA!");
+			Sleep(800);
+		}
+		switch(opcao){
+			case '1': cad_patrocinadores(); break;
+			case '2': acessar_dados_patrocinador(); break;
+			case '3': main(); break;	
+		}
+	}while(opcao != '3');
+}
+//------- ACESSAR DADOS -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+gamers acessar_dados_participante(){
+	FILE *arq;
+	gamers participante;
+	int flag = 0, pos = 0;
+	char user[50];
+	
+	arq = fopen("cadastro_participantes.dat", "rb");
+	if(arq == NULL){
+		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
+		return;
+	}
 	system("cls");
-	printf("\n\t\t\t\t\tษออออออออออออหออออออออออออหออออออออออออ%c", 187);
-	printf("\n\t\t\t\t\tบ    FPS     บ    RPG     บ    ESP     บ");
-	printf("\n\t\t\t\t\tบ            บ            บ            บ");
-	printf("\n\t\t\t\t\tบ  vagas =   บ  vagas =   บ  vagas =   บ");
-	printf("\n\t\t\t\t\tฬออออออออออออฮออออออออออออฮออออออออออออ%c", 185);
-	printf("\n\t\t\t\t\tบ    AVE     บ    LUT     บ    COR     บ");
-	printf("\n\t\t\t\t\tบ            บ            บ            บ");
-	printf("\n\t\t\t\t\tบ  total =   บ  vagas =   บ  vagas =   บ");
-	printf("\n\t\t\t\t\tศออออออออออออสออออออออออออสออออออออออออผ");
+	do{
+		flag = 0;
+		rewind(arq);
+		printf("\n\t%c USUARIO %c ", 254, 175);
+		fflush(stdin);
+		gets(user);
+		while(fread(&participante, sizeof(participante), 1, arq)){
+			if(strcmp(user, participante.usuario) == 0){
+				mostra_participante(participante);
+				break;
+			}
+		}
+		if(strcmp(user, participante.usuario) != 0){
+			flag = 1;
+			printf("\n\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
+		}
+	}while(flag == 1);
+	fclose(arq);
+	return participante;
+}
+
+patrocinadores acessar_dados_patrocinador(){
+	char email[150];
+	int flag = 0;
+	patrocinadores empresa;
+	FILE *arqPAT = fopen("cad_patrocinadores", "rb");
+	do{
+		flag = 0;
+		printf("\n\t%cENDERECO DE EMAIL %c ");
+		fflush(stdin);
+		gets(email);
+		while(fread(&empresa, sizeof(empresa), 1, arqPAT)){
+			if(strcmp(email, empresa.email) == 0){
+				mostra_patrocinador(empresa);
+			}
+			if(strcmp(email, empresa.email) > 0){
+				flag = 1;
+				printf("\n\tENDERECO DE EMAIL NAO CADASTRADO NO SISTEMA! TENTE NOVAMENTE!");
+			}
+		}
+	}while(flag == 1);
+	return empresa;
+}
+//------- MOSTRA DADOS -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void mostra_patrocinador(patrocinadores empresa){
+	printf("\n\t%c NOME %c ", 254, 175, empresa.nome);
+	printf("\n\t%c EMAIL %c ", 254, 175, empresa.email);
+	printf("\n\t%c STAND %c", 254, 175, empresa.stand_escolhido);
+	printf("\n\t %c PATROCINIO %c ", 254, 175, empresa.quantia);
 	printf("\n\n\t");
 	system("pause");
 }
 
-void sobre(){
-	system("cls");
-	printf("\n\t\t\t\t\t\t\tSOBRE O EVENTO\n");
-	printf("\n\t%c EVENTO DE GAMES PARA A COMUNIDADE DE ALUNOS DA UCB E ENTORNO.\n", 254);
-	printf("\n\t%c QUALQUER ALUNO DE QUALQUER CURSO PODE PARTICIPAR.\n", 254);
-	printf("\n\t%c OS PATROCINADORES PODEM SE CADASTRAR E ANALISAREMOS O CADASTRO.\n", 254);
-	printf("\n\t%c AS EMPRESAS QUE DESEJAM SER ORGANIZADORAS DO EVENTO DEVEM FAZER O CADASTRO.\n", 254);
-	printf("\n\t%c O EVENTO CONTERA 6 STANDS DE JOGOS, SENDO ELES: RPG, FPS, LUTA, CORRIDA, AVENTURA E ESPORTES.\n", 254);
-	printf("\n\t%c CADA PARTICIPANTE PODE ESCOLHER APENAS UM STAND.\n", 254);
+void mostra_participante(gamers participante){
+	printf("\n\t%c USUARIO %c %s", 254, 175, participante.usuario);
+	printf("\n\t%c NOME %c %s", 254, 175, participante.nome);
+	printf("\n\t%c TIPO DE STAND %c %c\n", 254, 175, participante.stand);
 	printf("\n\t");
 	system("pause");
-	main();
+}
+
+void mostra_participantes(){
+	gamers participante;
+	FILE *arq = fopen("cadastro_participantes.dat", "rb");
+	
+	if(arq == NULL){
+		printf("\n\tERRO AO ABRIR O ARQUIVO!");
+		return;
+	}
+	system("cls");
+	printf("\n\t\t\t\t\t     USUARIOS CADASTRADOS NO SISTEMA");
+	while((fread(&participante, sizeof(participante), 1, arq)) && (participante.deletado != '*')){
+		printf("\n\t%c USUARIO %c %s", 254, 175, participante.usuario);
+		printf("\n\t%c NOME %c %s", 254, 175, participante.nome);
+		printf("\n\t%c TIPO DE STAND %c %c", 254, 175, participante.stand);
+		printf("\n");
+	}
+	printf("\n\t");
+	system("\n\tpause");
+	fclose(arq);
+}
+//------- CADASTROS -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void cad_patrocinadores(){
+	char email[150];
+	patrocinadores empresa;
+	FILE *arqPAT = fopen("cad_patrocinadores", "ab+");
+	
+	if(arqPAT == NULL){
+		printf("\n\tERRO AO ABRIR O ARQUIVO!");
+		return;
+	}
+	system("cls");
+	printf("\n\t%c NOME DA EMPRESA %c ", 254, 175);
+	fflush(stdin);
+	leValidaNome(empresa.nome);
+	leValidaEmailPat(email);
+	strcpy(empresa.email, email);
+	empresa.stand_escolhido = leValidaStand();
+	printf("\n\t%c PATROCINIO %c ", 254, 175);
+	scanf("%f", &empresa.quantia);
+	fwrite(&empresa, sizeof(empresa), 1, arqPAT);
+	fclose(arqPAT);
 }
 
 void cad_participantes(){
@@ -265,32 +379,6 @@ void cad_participantes(){
 	}while(cheio == 1);
 }
 
-void menu_patrocinadores(){
-	int opcao;
-	do{
-		system("cls");
-		printf("\n\n\n\n\n\n\n\n");
-		printf("\n                                  ษอออออออออออออออออ MENU PATROCINADOR ออออออออออออออออ%c\n", 187);		
-		printf("                                  บ                                                    บ\n");
-		printf("                                  บ                   %c 1[CADASTRAR]                   บ\n", 254);
-		printf("                                  บ                   %c 2[ACESSO A INFORMACOES]        บ\n", 254);
-		printf("                                  บ                   %c 3[VOLTAR AO INICIO]            บ\n", 254);
-		printf("                                  บ                                                    บ\n");
-		printf("                                  ศอออออออออออออออออออออออออออออออออออออออออออออออออออ%c", 188);
-		printf("\n\t\t\t\t\t\t\t%c OPCAO %c", 254, 175);
-		opcao = getch();
-		if(opcao != '1' && opcao != '2' && opcao != '3' && opcao != '4' && opcao != '5' && opcao != '0'){
-			printf("\n\t\t\t\t\t\t      OPCAO INVALIDA!");
-			Sleep(800);
-		}
-		switch(opcao){
-			case '1': cad_patrocinadores(); break;
-			case '2': acessar_dados_patrocinador(); break;
-			case '3': main(); break;	
-		}
-	}while(opcao != '3');
-}
-
 void cad_empresas(){
 	FILE *arqEMP;
 	char email[150];
@@ -316,102 +404,7 @@ void cad_empresas(){
 	printf("\n\n\t");
 	system("pause");
 }
-
-gamers acessar_dados_participante(){
-	FILE *arq;
-	gamers participante;
-	int flag = 0, pos = 0;
-	char user[50];
-	
-	arq = fopen("cadastro_participantes.dat", "rb");
-	if(arq == NULL){
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
-		return;
-	}
-	system("cls");
-	do{
-		flag = 0;
-		rewind(arq);
-		printf("\n\t%c USUARIO %c ", 254, 175);
-		fflush(stdin);
-		gets(user);
-		while(fread(&participante, sizeof(participante), 1, arq)){
-			if(strcmp(user, participante.usuario) == 0){
-				mostra_participante(participante);
-				break;
-			}
-		}
-		if(strcmp(user, participante.usuario) != 0){
-			flag = 1;
-			printf("\n\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
-		}
-	}while(flag == 1);
-	fclose(arq);
-	return participante;
-}
-
-patrocinadores acessar_dados_patrocinador(){
-	char email[150];
-	int flag = 0;
-	patrocinadores empresa;
-	FILE *arqPAT = fopen("cad_patrocinadores", "rb");
-	do{
-		flag = 0;
-		printf("\n\t%cENDERECO DE EMAIL %c ");
-		fflush(stdin);
-		gets(email);
-		while(fread(&empresa, sizeof(empresa), 1, arqPAT)){
-			if(strcmp(email, empresa.email) == 0){
-				mostra_patrocinador(empresa);
-			}
-			if(strcmp(email, empresa.email) > 0){
-				flag = 1;
-				printf("\n\tENDERECO DE EMAIL NAO CADASTRADO NO SISTEMA! TENTE NOVAMENTE!");
-			}
-		}
-	}while(flag == 1);
-	return empresa;
-}
-
-void mostra_patrocinador(patrocinadores empresa){
-	printf("\n\t%c NOME %c ", 254, 175, empresa.nome);
-	printf("\n\t%c EMAIL %c ", 254, 175, empresa.email);
-	printf("\n\t%c STAND %c", 254, 175, empresa.stand_escolhido);
-	printf("\n\t %c PATROCINIO %c ", 254, 175, empresa.quantia);
-	printf("\n\n\t");
-	system("pause");
-}
-
-void cad_patrocinadores(){
-	char email[150];
-	patrocinadores empresa;
-	FILE *arqPAT = fopen("cad_patrocinadores", "ab+");
-	
-	if(arqPAT == NULL){
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");
-		return;
-	}
-	system("cls");
-	printf("\n\t%c NOME DA EMPRESA %c ", 254, 175);
-	fflush(stdin);
-	leValidaNome(empresa.nome);
-	leValidaEmailPat(email);
-	strcpy(empresa.email, email);
-	empresa.stand_escolhido = leValidaStand();
-	printf("\n\t%c PATROCINIO %c ", 254, 175);
-	scanf("%f", &empresa.quantia);
-	fwrite(&empresa, sizeof(empresa), 1, arqPAT);
-	fclose(arqPAT);
-}
-
-void mostra_participante(gamers participante){
-	printf("\n\t%c USUARIO %c %s", 254, 175, participante.usuario);
-	printf("\n\t%c NOME %c %s", 254, 175, participante.nome);
-	printf("\n\t%c TIPO DE STAND %c %c\n", 254, 175, participante.stand);
-	printf("\n\t");
-	system("pause");
-}
-
+//------- ALTERACAO DE DADOS -------------------------------------------------------------------------------------------------------------------------------------------------------------
 void alterar_dados_participante(){
 	int op, flag = 0;
 	char stand, user[50];
@@ -442,28 +435,8 @@ void alterar_dados_participante(){
 	fclose(arqPAR);
 }
 
-void mostra_participantes(){
-	gamers participante;
-	FILE *arq = fopen("cadastro_participantes.dat", "rb");
-	
-	if(arq == NULL){
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");
-		return;
-	}
-	system("cls");
-	printf("\n\t\t\t\t\t     USUARIOS CADASTRADOS NO SISTEMA");
-	while((fread(&participante, sizeof(participante), 1, arq)) && (participante.deletado != '*')){
-		printf("\n\t%c USUARIO %c %s", 254, 175, participante.usuario);
-		printf("\n\t%c NOME %c %s", 254, 175, participante.nome);
-		printf("\n\t%c TIPO DE STAND %c %c", 254, 175, participante.stand);
-		printf("\n");
-	}
-	printf("\n\t");
-	system("\n\tpause");
-	fclose(arq);
-}
-
-void excluir_cadastro(){
+//------ EXCLUIR CADASTRO DE PARTICIPANTE ---------------------------------------------------------------------------------------------------------------------------------------
+void excluir_cadastro_participante(){
 	int flag = 0;
 	char user[50], resp;
 	gamers participante;
@@ -511,7 +484,7 @@ void organizar_cads(){
 	fclose(arq2);
 }	
 
-//Funcoes de validacao
+//------ FUNCOES DE VALIDACAO --------------------------------------------------------------------------------------------------------------------------------------------------
 
 void leValidaUsuario(char user[]){
 	gamers participante;
@@ -641,5 +614,32 @@ void leValidaEmailPat(char email[]){
 	}while(flag == 1);
 	fclose(arq);
 }
-
-
+//------ STANDS ---------------------------------------------------------------------------------------------------------------------------------------
+void stands(){
+	system("cls");
+	printf("\n\t\t\t\t\tษออออออออออออหออออออออออออหออออออออออออ%c", 187);
+	printf("\n\t\t\t\t\tบ    FPS     บ    RPG     บ    ESP     บ");
+	printf("\n\t\t\t\t\tบ            บ            บ            บ");
+	printf("\n\t\t\t\t\tบ  vagas =   บ  vagas =   บ  vagas =   บ");
+	printf("\n\t\t\t\t\tฬออออออออออออฮออออออออออออฮออออออออออออ%c", 185);
+	printf("\n\t\t\t\t\tบ    AVE     บ    LUT     บ    COR     บ");
+	printf("\n\t\t\t\t\tบ            บ            บ            บ");
+	printf("\n\t\t\t\t\tบ  total =   บ  vagas =   บ  vagas =   บ");
+	printf("\n\t\t\t\t\tศออออออออออออสออออออออออออสออออออออออออผ");
+	printf("\n\n\t");
+	system("pause");
+}
+//------ SOBRE O EVENTO ---------------------------------------------------------------------------------------------------------------------------------------
+void sobre(){
+	system("cls");
+	printf("\n\t\t\t\t\t\t\tSOBRE O EVENTO\n");
+	printf("\n\t%c EVENTO DE GAMES PARA A COMUNIDADE DE ALUNOS DA UCB E ENTORNO.\n", 254);
+	printf("\n\t%c QUALQUER ALUNO DE QUALQUER CURSO PODE PARTICIPAR.\n", 254);
+	printf("\n\t%c OS PATROCINADORES PODEM SE CADASTRAR E ANALISAREMOS O CADASTRO.\n", 254);
+	printf("\n\t%c AS EMPRESAS QUE DESEJAM SER ORGANIZADORAS DO EVENTO DEVEM FAZER O CADASTRO.\n", 254);
+	printf("\n\t%c O EVENTO CONTERA 6 STANDS DE JOGOS, SENDO ELES: RPG, FPS, LUTA, CORRIDA, AVENTURA E ESPORTES.\n", 254);
+	printf("\n\t%c CADA PARTICIPANTE PODE ESCOLHER APENAS UM STAND.\n", 254);
+	printf("\n\t");
+	system("pause");
+	main();
+}
