@@ -6,9 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
 #include <locale.h>
-#include <ctype.h>
 
 typedef struct{
 	char nome[100];
@@ -20,33 +18,36 @@ typedef struct{
 	char nome[100];
 	char stand;
 	char usuario[50];
-	char stand_patrocinador;
-	char deletado;
 }gamers;
+
+typedef struct{
+	char nome[100];
+	int email[150];
+	float quantia;
+}patrocinadores;
 
 //Menus
 void menu_participantes();
 void menu_organizadores();
+void menu_patrocinadores();
 //Cadastros
 void cad_empresas();
 void cad_participantes();
+void cad_patrocinadores();
 //Possibilidades no menu de participantes
 void stands();
 void sobre();
 //Possibilidades no menu de organizadores
-void excluir_cadastro();
-void mostra_participantes();
-void organizar_cads();
+void backup();
+void restore();
+void vagas();
 //Alteracao de dados de participantes
-gamers acessar_dados();
+void acessar_dados();
 void alterar_dados();
-void mostra_dados(gamers);
 //Funcoes de validacao
 void leValidaUsuario(char []);
 char leValidaStand();
 void leValidaNome(char []);
-void leValidaSenha();
-void leValidaEmail(char[]);
 
 int main(void){
 	char escolha;
@@ -58,26 +59,37 @@ int main(void){
 		printf("\t\t\t\t\t\t\t%c O QUE VOCE E?\n", 254);
 		printf("\n\t\t\t\t\t\t\t%c [1]PARTICIPANTE", 254);
 		printf("\n\t\t\t\t\t\t\t%c [2]EMPRESA", 254);
-		printf("\n\t\t\t\t\t\t\t%c [3]SOBRE O EVENTO", 254);
+		printf("\n\t\t\t\t\t\t\t%c [3]PATROCINADOR", 254);
+		printf("\n\t\t\t\t\t\t\t%c [4]SOBRE O EVENTO", 254);
 		printf("\n\t\t\t\t\t\t\t%c [0]SAIR DO PROGRAMA", 254);
 		printf("\n\n\t\t\t\t\t          %c APERTE A RESPECTIVA OPCAO %c ", 254, 175);
 		escolha = getch();
 		escolha = toupper(escolha);
-		if(escolha != '1' && escolha != '2' && escolha != '3'){
+		if(escolha != '1' && escolha != '2' && escolha != '3' && escolha != '4' && escolha != '0'){
 			printf("\n\t\t\t\t\t\t\tCARACTER INVALIDO!");
 			Sleep(800);
 		}
 		system("cls");
-	}while(escolha != '1' && escolha != '2' && escolha != '3');
+	}while(escolha != '1' && escolha != '2' && escolha != '3' && escolha != '4'&& escolha != '0');
+
 	switch(escolha){
-		case '1': menu_participantes(); break;
-		case '2': menu_organizadores(); break;
-		case '3': sobre(); break;
+		case '1':
+			menu_participantes();
+			break;
+		case '2':
+			menu_organizadores();
+			break;
+		case '3':
+			menu_patrocinadores();
+			break;
+		case '4':
+			sobre();
+			break;
 	}
 }
 
 void menu_participantes(){
-	int opcao, pos;
+	int opcao;
 	
 	do{
 		system("cls");
@@ -89,34 +101,56 @@ void menu_participantes(){
 		printf("                                  บ                   %c 3[ALTERAR DADOS]              บ\n", 254);
 		printf("                                  บ                   %c 4[STANDS]                     บ\n", 254);
 		printf("                                  บ                   %c 5[VOLTAR AO INICIO]           บ\n", 254);
+		printf("                                  บ                   %c 0[FECHAR]                     บ\n", 254);
 		printf("                                  บ                                                   บ\n");
 		printf("                                  ศอออออออออออออออออออออออออออออออออออออออออออออออออออ%c", 188);
 		printf("\n\t\t\t\t\t\t\t%c OPCAO %c ", 254, 175);
 		opcao = getch();
-		if(opcao != '1' && opcao != '2' && opcao != '3' && opcao != '4' && opcao != '5' && opcao != '6'){
+		if(opcao != '1' && opcao != '2' && opcao != '3' && opcao != '4' && opcao != '5' && opcao != '6'&&opcao != '0'){
 			printf("\n\t\t\t\t\t\t      OPCAO INVALIDA!");
 			Sleep(800);
 		}
 		switch(opcao){
-			case '1': cad_participantes(); break;
-			case '2': acessar_dados(); break;
-			case '3': alterar_dados(); break;
-			case '4': stands(); break;
-			case '5': main(); break;
+			case '1':
+				cad_participantes();
+				break;
+			case '2':
+				acessar_dados();
+				break;
+			case '3':
+				alterar_dados();
+				break;
+			case '4':
+				stands();
+				break;
+			case '5':
+				main();
+				break;
 		}
-	}while(opcao != '5');
+	}while(opcao != '0');
 }
 
 void menu_organizadores(){
-	int opcao, flag;
+	int opcao, tentativa, flag;
 	char resp;
+	FILE *arqEMP;
+	organizadores empresas;
 
+	arqEMP = fopen("organizadores.dat", "ab+");
 	printf("\n\t%c DIGITE [S] SE JA E CADASTRADO E QUALQUER OUTRA TECLA SE NAO E %c ", 254, 175);
-	fflush(stdin);
 	resp = getchar();
 	resp = toupper(resp);
 	if(resp == 'S'){
-		leValidaSenha();
+		while(fread(&empresas, sizeof(empresas), 1, arqEMP) && flag == 1);
+			do{
+				printf("\n\t%c DIGITE A SENHA DE ACESSO %c ", 254, 175);
+				scanf("%d", &tentativa);
+				if(tentativa != empresas.senha){
+					printf("\n\t\t\t\t\t\t    SENHA INVALIDA!");
+					flag = 1;
+					Sleep(800);
+				}
+			}while(empresas.senha != tentativa);
 	}else
 		cad_empresas();
 	do{
@@ -124,27 +158,49 @@ void menu_organizadores(){
 		printf("\n\n\n\n\n\n\n\n");
 		printf("\n                                  ษอออออออออออออออออ MENU ORGANIZADOR ออออออออออออออออ%c\n", 187);
 		printf("                                  บ                                                   บ\n");
-		printf("                                  บ                   %c 1[ACESSO A INFORMACOES]       บ\n", 254);
-		printf("                                  บ                   %c 2[STANDS]                     บ\n", 254);
-	    printf("                                  บ                   %c 3[PATROCINIO TOTAL]           บ\n", 254);
-		printf("                                  บ                   %c 4[ORGANIZAR CADASTROS]        บ\n", 254);
-		printf("                                  บ                   %c 5[VOLTAR AO INICIO]           บ\n", 254);
+		printf("                                  บ                   %c 1[VAGAS]                      บ\n", 254);
+		printf("                                  บ                   %c 2[BACKUP DE DADOS]            บ\n", 254);
+		printf("                                  บ                   %c 3[RESTAURAR DADOS]            บ\n", 254);
+		printf("                                  บ                   %c 4[VOLTAR AO INICIO]           บ\n", 254);
+		printf("                                  บ                   %c 0[FECHAR]                     บ\n", 254);
 		printf("                                  บ                                                   บ\n");
 		printf("                                  ศอออออออออออออออออออออออออออออออออออออออออออออออออออ%c", 188);
 		printf("\n\t\t\t\t\t\t\t%c OPCAO %c", 254, 175);
 		opcao = getch();
-		if(opcao != '1' && opcao != '2' && opcao != '3' && opcao != '4' && opcao != '5' && opcao != '0'){
-			printf("\n\t\t\t\t\t\t      OPCAO INVALIDA!");
+		if(opcao != '1' && opcao != '2' && opcao != '3' && opcao != '4' && opcao != '0'){
+			printf("\n\t\t\t\t\t\t  OPCAO INVALIDA!");
 			Sleep(800);
 		}
 		switch(opcao){
-			case '1': mostra_participantes(); break;
-			case '2': stands(); break;
-			case '3': break;
-			case '4': excluir_cadastro(); break;
-			case '5': main(); break;	
+			case '1':
+				vagas();
+				break;
+			case '2':
+				system("cls");
+				printf("\n\t\t\t\t\t\t\tBACKUP DE DADOS");
+				printf("\n");
+				backup();
+				printf("\n\tPRESSIONE UMA TECLA PARA CONTINUAR...");
+				getch();
+				break;
+			case '3':
+				system("cls");
+				printf("\n\t\t\t\t\t\t\tRESTAURAR DADOS");
+				printf("\n");
+				restore();
+				printf("\n\tPRESSIONE UMA TECLA PARA CONTINUAR...");
+				getch();
+				break;
+			case '4':
+				main();
+				break;
 		}
-	}while(opcao != '5');
+	}while(opcao != '0');
+	fclose(arqEMP);
+}
+
+void menu_patrocinadores() {
+	printf("NOME DA EMPRESA>> ");
 }
 
 void stands(){
@@ -159,8 +215,24 @@ void stands(){
 	printf("\n\t\t\t\t\tบ            บ            บ            บ");
 	printf("\n\t\t\t\t\tบ  total =   บ  vagas =   บ  vagas =   บ");
 	printf("\n\t\t\t\t\tศออออออออออออสออออออออออออสออออออออออออผ");
-	printf("\n\n\t");
-	system("pause");
+	printf("\n\n\t\t\t\t\t PRESSIONE UMA TECLA PARA CONTINUAR...");
+	getch();
+}
+
+void backup(){
+
+}
+
+void restore(){
+
+}
+
+void vagas(){
+	system("cls");
+	printf("\n\t\t\t\t\t\t\tVAGAS");
+	printf("\n");
+	printf("\n\tPRESSIONE UMA TECLA PARA CONTINUAR...");
+	getch();
 }
 
 void sobre(){
@@ -172,46 +244,37 @@ void sobre(){
 	printf("\n\t%c AS EMPRESAS QUE DESEJAM SER ORGANIZADORAS DO EVENTO DEVEM FAZER O CADASTRO.\n", 254);
 	printf("\n\t%c O EVENTO CONTERม 6 STANDS DE JOGOS, SENDO ELES: RPG, FPS, LUTA, CORRIDA, AVENTURA E ESPORTES.\n", 254);
 	printf("\n\t%c CADA PARTICIPANTE PODE ESCOLHER APENAS UM STAND.\n", 254);
-	printf("\n\t");
-	system("pause");
+	printf("\n\t%c ", 254);
+	printf("\n\n\tPRESSIONE UMA TECLA PARA CONTINUAR...");
+	getch();
 	main();
 }
 
 void cad_participantes(){
-	char user[50], nome[100];
-	int flag = 0, cheio = 0, total_stands[6], total = 0, i;
 	gamers participante;
-	FILE *arqPAR = fopen("cadastro_participantes.dat", "ab+");
-	FILE *stands = fopen("total_stands.dat", "ab+");
+	FILE *arqPAR;
+	char user[50], nome[100];
+	int flag = 0, cheio = 0, total_stands[6];
 
 	system("cls");
-	if(arqPAR == NULL){
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
-		return;
-	}
-	for(i = 0; i < 6; i++){
-		total_stands[i] = 0;
-	}
-	fread(&total_stands, sizeof(total_stands), 1, stands);
+	arqPAR = fopen("cadastro_participantes.dat", "ab+");
 	do{
 		cheio = 0;
 		printf("\n\t\t\t\t\t\t\tCADASTRAR");
 		printf("\n");
 		printf("\n\t%c BEM-VINDO, GAMER. DIGITE SEU NOME %c ", 254, 175);
+		fflush(stdin);
 		leValidaNome(participante.nome);
 		printf("\n\t%c OLA, %s.", 254, participante.nome);
 		leValidaUsuario(user);
 		strcpy(participante.usuario, user);
 		participante.stand = leValidaStand();
-		participante.deletado = ' ';
 		switch(participante.stand){
 			case 'R':
 				total_stands[0]++;
-				printf("\n\tTOTAL: %d", total_stands[0]);
 				break;
 			case 'F':
 				total_stands[1]++;
-				printf("\n\tTOTAL: %d", total_stands[1]);
 				break;
 			case 'C':
 				total_stands[2]++;
@@ -227,9 +290,7 @@ void cad_participantes(){
 				break;
 		}
 		fwrite(&participante, sizeof(participante), 1, arqPAR);
-		fwrite(&total_stands, sizeof(total_stands), 1, stands);
 		fclose(arqPAR);
-		fclose(stands);
 		printf("\n\tCADASTRO REALIZADO COM SUCESSO!");
 		Sleep(1000);
 		menu_participantes();
@@ -239,88 +300,87 @@ void cad_participantes(){
 void cad_empresas(){
 	FILE *arqEMP;
 	char email[150];
-	int senha;
 	organizadores empresa;
 	
-	srand(time(NULL));
 	arqEMP = fopen("organizadores.dat", "ab");
-	if(arqEMP == NULL){
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
-		return;
-	}
 	printf("\n\t%c NOME DA EMPRESA ORGANIZADORA %c ", 254, 175);
 	fflush(stdin);
-	leValidaNome(empresa.nome);
-	leValidaEmail(email);
-	strcpy(empresa.email, email);
-	senha = 1000 + (rand() % 1000);
-	empresa.senha = senha;
-	printf("\n\n\t%c SENHA DE ACESSO PARA INFORMACOES DO EVENTO %c %d", 254, 175, empresa.senha);
+	gets(empresa.nome);
+	empresa.senha = 1414;
+	printf("\n\t%c SENHA DE ACESSO PARA INFORMACOES DO EVENTO %c %d", 254, 175, empresa.senha);
 	fwrite(&empresa, sizeof(empresa), 1, arqEMP);
 	fclose(arqEMP);
-	printf("\n\n\t");
-	system("pause");
+	getch();
 }
 
-gamers acessar_dados(){
+void cad_patrocinadores(){
+
+	FILE *arqPAT;
+}
+
+void acessar_dados(){
 	FILE *arq;
 	gamers participante;
-	int flag = 0, pos = 0;
+	int flag = 0;
 	char user[50];
 	
 	arq = fopen("cadastro_participantes.dat", "rb");
-	if(arq == NULL){
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
-		return;
-	}
 	system("cls");
 	do{
 		flag = 0;
-		rewind(arq);
-		printf("\n\t%c USUARIO %c ", 254, 175);
+		printf("\n\t%c DIGITE SEU USUARIO %c ", 254, 175);
 		fflush(stdin);
 		gets(user);
 		while(fread(&participante, sizeof(participante), 1, arq)){
 			if(strcmp(user, participante.usuario) == 0){
-				mostra_dados(participante);
-				break;
+				printf("\n\t%c USUARIO %c %s", 254, 175, participante.usuario);
+				printf("\n\t%c NOME %c %s", 254, 175, participante.nome);
+				printf("\n\t%c TIPO DE STAND %c %c", 254, 175, participante.stand);
+				getch();
+			}else{
+				flag = 1;
 			}
 		}
-		if(strcmp(user, participante.usuario) != 0){
-			flag = 1;
+		if(flag == 1)
 			printf("\n\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
-		}
 	}while(flag == 1);
 	fclose(arq);
-	return participante;
-}
-
-void mostra_dados(gamers participante){
-	printf("\n\t%c USUARIO %c %s", 254, 175, participante.usuario);
-	printf("\n\t%c NOME %c %s", 254, 175, participante.nome);
-	printf("\n\t%c TIPO DE STAND %c %c\n", 254, 175, participante.stand);
-	printf("\n\t");
-	system("pause");
 }
 
 void alterar_dados(){
 	int op, flag = 0;
 	char stand, user[50];
+	FILE *arqPAR;
 	gamers participante;
-	FILE *arqPAR = fopen("cadastro_participantes.dat", "ab+");
 	
-	if(arqPAR == NULL){
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
-		return;
-	}
-	participante = acessar_dados();
+	arqPAR = fopen("cadastro_participantes.dat", "ab+");
+	do{
+		flag = 0;
+		printf("\n\t%c DIGITE SEU USUARIO %c ", 254, 175);
+		fflush(stdin);
+		gets(user);
+		while(fread(&participante, sizeof(participante), 1, arqPAR)){
+			if(strcmp(user, participante.usuario) == 0){
+				printf("\n\t%c USUARIO %c %s", 254, 175, participante.usuario);
+				printf("\n\t%c NOME %c %s", 254, 175, participante.nome);
+				printf("\n\t%c TIPO DE STAND %c %c", 254, 175, participante.stand);
+				getch();
+			}else{
+				flag = 1;
+			}
+		}
+		if(flag == 1)
+			printf("\n\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
+	}while(flag == 1);
 	printf("\n\n\t%c ESCOLHA O QUE DESEJA ALTERAR\n", 254, 175);
 	printf("\n\t%c [1]STAND", 254);
 	printf("\n\t%c [2]USUARIO", 254);
 	printf("\n\t%c OPCAO %c ", 254, 175);
 	scanf("%d", &op);
 	switch(op){
-		case 1: participante.stand = leValidaStand(); break;
+		case 1:
+			participante.stand = leValidaStand();
+			break;
 		case 2:
 			leValidaUsuario(user);
 			strcpy(participante.usuario, user);
@@ -330,113 +390,24 @@ void alterar_dados(){
 	fclose(arqPAR);
 }
 
-void mostra_participantes(){
-	gamers participante;
-	FILE *arq = fopen("cadastro_participantes.dat", "rb");
-	
-	if(arq == NULL){
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");
-		return;
-	}
-	system("cls");
-	printf("\n\t\t\t\t\t     USUARIOS CADASTRADOS NO SISTEMA");
-	while((fread(&participante, sizeof(participante), 1, arq)) && (participante.deletado != '*')){
-		printf("\n\t%c USUARIO %c %s", 254, 175, participante.usuario);
-		printf("\n\t%c NOME %c %s", 254, 175, participante.nome);
-		printf("\n\t%c TIPO DE STAND %c %c", 254, 175, participante.stand);
-		printf("\n");
-	}
-	printf("\n\t");
-	system("\n\tpause");
-	fclose(arq);
-}
-
-void excluir_cadastro(){
-	int flag = 0;
-	char user[50], resp;
-	gamers participante;
-	FILE  *arqPAR = fopen("cadastro_participantes.dat", "ab+");
-	
-	if(arqPAR == NULL){
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");
-		return;
-	}
-	system("cls");
-	printf("\n\t\t\t\t\t        EXCLUSAO DE CADASTROS");
-	do{
-		flag = 0;
-		printf("\n\t%c USUARIO %c ", 254, 175);
-		fflush(stdin);
-		gets(user);
-		if(strcmp(participante.usuario, user) > 0){
-			flag = 1;
-		}
-	}while(fread(&participante, sizeof(participante), 1, arqPAR) || flag == 1);
-	while((fread(&participante, sizeof(participante), 1, arqPAR)) && (participante.deletado != '*')){
-		if(strcmp(user, participante.usuario) == 0){
-			printf("\n\t%c USUARIO %c %s", 254, 175, participante.usuario);
-			printf("\n\t%c NOME %c %s", 254, 175, participante.nome);
-			printf("\n\t%c TIPO DE STAND %c %c", 254, 175, participante.stand);	
-			printf("\n\n\t%c TEM CERTEZA QUE DESEJA FAZER A EXCLUSAO?", 254);
-			printf("\n\t%c [S][N] %c ", 254, 175);
-			resp = getch();
-			resp = toupper(resp);
-			if(resp == 'S'){
-				participante.deletado = '*';
-				fseek(arqPAR, -sizeof(participante), SEEK_CUR);
-				fwrite(&participante, sizeof(participante), 1, arqPAR);
-				fseek(arqPAR, 0, SEEK_CUR);
-				organizar_cads();	
-				printf("\n\n\tEXCLUSAO FEITA COM SUCESSO");
-				Sleep(1000);
-			}
-		}
-	}
-	fclose(arqPAR);
-}
-
-void organizar_cads(){
-	gamers participante;
-	FILE *arq = fopen("cadastro_participantes.dat", "rb");
-	FILE *arq2 = fopen("cadastro_participantes.bak", "ab");
-	
-	if ((arq == NULL) || (arq2 == NULL)) {
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");
-		return;
-	}
-	while(fread(&participante, sizeof(participante), 1, arq)){
-		if(participante.deletado != '*')
-			fwrite(&participante, sizeof(participante), 1, arq2);
-	}
-	remove("cadastro_participantes.dat");
-	rename("cadastro_participantes.bak", "cadastro_participantes.dat");	
-	fclose(arq);
-	fclose(arq2);
-}	
-
-//Funcoes de validacao
-
 void leValidaUsuario(char user[]){
 	gamers participante;
 	FILE *arq;
 	int flag = 0;
 	
-	arq = fopen("cadastro_participantes.dat", "ab+");
-	if(arq == NULL){
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");
-		return;
-	}
+	arq = fopen("cadastro_participantes.dat", "rb");
 	do{
 		flag = 0;
-		rewind(arq);
 		printf("\n\t%c USUARIO %c ", 254, 175);
 		fflush(stdin);
-		gets(user);
-		while(fread(&participante, sizeof(participante), 1, arq) && flag == 0){	
+		leValidaNome(user);
+		while(fread(&participante, sizeof(participante), 1, arq)){
 			if(strcmp(user, participante.usuario) == 0){
-				printf("\n\tUSUARIO JA CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
 				flag = 1;
 			}
+		}
+		if(flag == 1){
+			printf("\n\tUSUARIO JA CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
 		}
 	}while(flag == 1);
 	fclose(arq);
@@ -459,65 +430,12 @@ char leValidaStand(){
 }
 
 void leValidaNome(char nome[]){
-	int flag = 0;
 	do{
-		flag = 0;
 		fflush(stdin);
 		gets(nome);
 		if(strlen(nome) == 0){
-			flag = 1;
 			printf("\n\tDIGITE ALGO!");
 		}
-	}while(flag == 1);
+	}while(strlen(nome) == 0);
 }
-
-void leValidaSenha(){
-	int flag = 0, tentativa;
-	organizadores empresas;
-	FILE *arqEMP = fopen("organizadores.dat", "rb");
 	
-	if(arqEMP == NULL){
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
-		return;
-	}
-	do{
-		flag = 0;
-		rewind(arqEMP);
-		printf("\n\t%c DIGITE A SENHA DE ACESSO %c ", 254, 175);
-		scanf("%d", &tentativa);
-		while(fread(&empresas, sizeof(empresas), 1, arqEMP) && flag == 0){
-			if(tentativa != empresas.senha){
-				printf("\n\t\t\t\t\t\t    SENHA INVALIDA!");
-				flag = 1;
-				Sleep(800);
-			}
-		}
-	}while(flag == 1);
-	fclose(arqEMP);
-}
-
-void leValidaEmail(char email[]){
-	int flag = 0;
-	organizadores empresas;
-	FILE *arq = fopen("organizadores.dat", "rb");
-	
-	if(arq == NULL){
-		printf("\n\tERRO AO ABRIR O ARQUIVO!");
-		return;
-	}
-	do{
-		flag = 0;
-		rewind(arq);
-		printf("\n\t%c EMAIL %c ", 254, 175);
-		fflush(stdin);
-		gets(email);
-		while(fread(&empresas, sizeof(empresas), 1, arq) && flag == 0){
-			if(strcmp(email, empresas.email) == 0){
-				printf("\n\tEMAIL JA CADASTRADO NO SISTEMA. TENTE NOVAMENTE!");
-				flag = 1;
-			}
-		}
-	}while(flag == 1);
-}
-
-
