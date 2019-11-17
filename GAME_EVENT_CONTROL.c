@@ -18,7 +18,7 @@ typedef struct{
 
 typedef struct{
 	char nome[100];
-	char stand;
+	int stand;
 	char usuario[50];
 	char stand_patrocinador;
 	char deletado;
@@ -37,7 +37,7 @@ void menu_organizadores();
 void menu_patrocinadores();
 //----- Cadastros -----------------------------------------------------------------------------------------------------------------------------------------------
 void cad_empresas();
-void cad_participantes();
+void cad_participantes(int []);
 void cad_patrocinadores();
 //Possibilidades no menu de participantes
 void stands();
@@ -49,6 +49,7 @@ patrocinadores acessar_dados_patrocinador();
 void mostra_patrocinador();
 void mostra_participantes();
 void mostra_participante(gamers);
+void mostra_patrocinio();
 //----- Funcoes para alterar dados ------------------------------------------------------------------------------------------------------------------------------- 
 void alterar_dados_participante();
 void excluir_cadastro_participante();
@@ -105,10 +106,11 @@ int main(void){
 // ------ MENU PARTICIPANTES ----------------------------------------------------------------------------------------------------------------------------------------------
 
 void menu_participantes(){
-	int opcao, pos;
+	int opcao, pos, total_stands[6];
 	
 	do{
 		system("cls");
+		printf("\n\ttotal: %d", total_stands[0]); getch();
 		printf("\n\n\n\n\n\n\n");
 		printf("\n                                  ษอออออออออออออออออ MENU PARTICIPANTE อออออออออออออออ%c\n", 187);
 		printf("                                  บ                                                   บ\n");
@@ -126,7 +128,7 @@ void menu_participantes(){
 			Sleep(800);
 		}
 		switch(opcao){
-			case '1': cad_participantes(); break;
+			case '1': cad_participantes(total_stands); break;
 			case '2': acessar_dados_participante(); break;
 			case '3': alterar_dados_participante(); break;
 			case '4': stands(); break;
@@ -138,7 +140,7 @@ void menu_participantes(){
 void menu_organizadores(){
 	int opcao, flag;
 	char resp;
-
+	
 	printf("\n\t%c DIGITE [S] SE JA E CADASTRADO E QUALQUER OUTRA TECLA SE NAO E %c ", 254, 175);
 	fflush(stdin);
 	resp = getchar();
@@ -169,9 +171,9 @@ void menu_organizadores(){
 		switch(opcao){
 			case '1': mostra_participantes(); break;
 			case '2': stands(); break;
-			case '3': break;
+			case '3': mostra_patrocinio(); break;
 			case '4': excluir_cadastro_participante(); break;
-			case '5': break;
+			case '5': ; break;
 			case '6': main(); break;	
 		}
 	}while(opcao != '6');
@@ -188,7 +190,7 @@ void menu_patrocinadores(){
 		printf("                                  บ                   %c 2[ACESSO A INFORMACOES]        บ\n", 254);
 		printf("                                  บ                   %c 3[VOLTAR AO INICIO]            บ\n", 254);
 		printf("                                  บ                                                    บ\n");
-		printf("                                  ศอออออออออออออออออออออออออออออออออออออออออออออออออออ%c", 188);
+		printf("                                  ศออออออออออออออออออออออออออออออออออออออออออออออออออออ%c", 188);
 		printf("\n\t\t\t\t\t\t\t%c OPCAO %c", 254, 175);
 		opcao = getch();
 		if(opcao != '1' && opcao != '2' && opcao != '3' && opcao != '4' && opcao != '5' && opcao != '0'){
@@ -319,22 +321,37 @@ void cad_patrocinadores(){
 	fclose(arqPAT);
 }
 
-void cad_participantes(){
+void mostra_patrocinio(){
+	float pat_total = 0;
+	patrocinadores empresa;
+	FILE *arq = fopen("cad_patrocinadores.dat", "rb");
+	
+	system("cls");
+	while(fread(&empresa, sizeof(empresa), 1, arq)){
+		printf("%c NOME %c ", 254, 175, empresa.nome);
+		printf("%c PATROCINIO %c ", 254, 175, empresa.quantia);
+		printf("\n");
+		pat_total += empresa.quantia;
+	}
+	printf("\n\t%c PATROCINIO TOTAL %c ", 254, 175, pat_total);
+	printf("\n\t");
+	system("pause");
+	fclose(arq);
+}
+
+void cad_participantes(int total_stands[]){
 	char user[50], nome[100];
-	int flag = 0, cheio = 0, total_stands[6], aux = 0, total = 0, i;
+	int flag = 0, cheio = 0, aux = 0, total = 0, i;
 	gamers participante;
 	FILE *arqPAR = fopen("cadastro_participantes.dat", "ab+");
-	FILE *stands = fopen("total_stands.dat", "ab+");
+	//FILE *stands = fopen("total_stands.dat", "ab+");
 
 	system("cls");
 	if(arqPAR == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
 		return;
 	}
-	for(i = 0; i < 6; i++){
-		//aux[i] = 0;
-	}
-	fread(&total_stands, sizeof(total_stands), 1, stands);
+	//fread(&total_stands, sizeof(total_stands), 1, stands);
 	do{
 		cheio = 0;
 		printf("\n\t\t\t\t\t\t\tCADASTRAR");
@@ -347,32 +364,29 @@ void cad_participantes(){
 		participante.stand = leValidaStand();
 		participante.deletado = ' ';
 		switch(participante.stand){
-			case 'R':
-				aux++;
-				total_stands[0] += aux;
-				printf("\n\tTOTAL: %d", total_stands[0]);
+			case 0:
+				total_stands[0]++;	
 				break;
-			case 'F':
-				total_stands[1]++;
-				printf("\n\tTOTAL: %d", total_stands[1]);
+			case 1:
+				total_stands[participante.stand]++;
 				break;
-			case 'C':
+			case 2:
 				total_stands[2]++;
 				break;
-			case 'L':
+			case 3:
 				total_stands[3]++;
 				break;
-			case 'E':
+			case 4:
 				total_stands[4]++;
 				break;
-			case 'A':
+			case 5:
 				total_stands[5]++;
 				break;
 		}
 		fwrite(&participante, sizeof(participante), 1, arqPAR);
-		fwrite(&total_stands, sizeof(total_stands), 1, stands);
+		//fwrite(&total_stands, sizeof(total_stands), 1, stands);
 		fclose(arqPAR);
-		fclose(stands);
+		//fclose(stands);
 		printf("\n\tCADASTRO REALIZADO COM SUCESSO!");
 		Sleep(1000);
 		menu_participantes();
