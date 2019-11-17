@@ -18,7 +18,7 @@ typedef struct{
 
 typedef struct{
 	char nome[100];
-	int stand;
+	char stand;
 	char usuario[50];
 	char stand_patrocinador;
 	char deletado;
@@ -61,8 +61,9 @@ void leValidaNome(char []);
 void leValidaSenha();
 void leValidaEmailOrg(char[]);
 void leValidaEmailPat(char []);
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+int verifica_limite(int);
+//------ Estatisticas -----------------------------------------------------------------------------------------------------------------------------------------------------
+void estatisticas();
 //------ MENU PRINCIPAL ----------------------------------------------------------------------------------------------------------------------------------------------
 int main(void){
 	char escolha;
@@ -80,7 +81,8 @@ int main(void){
 		printf("\t\t\t\t\t    @@@@@@@@@@    @@@@@@@    @@@@@@@@@@\n");  
 		printf("\t\t\t\t\t    @@@@@@@@  @@@@       @@@@  @@@@@@@@\n");  
 		printf("\t\t\t\t\t    @@@@@@@                     @@@@@@@\n");  
-		printf("\t\t\t\t\t     @@@@@                       @@@@@\n");  
+		printf("\t\t\t\t\t     @@@@@                       @@@@@\n");
+		printf("ออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ");  
 		printf("\n\t\t\t\t\t\t     %c O QUE VOCE E?\n", 254);
 		printf("\n\t\t\t\t\t\t     %c [1]PARTICIPANTE", 254);
 		printf("\n\t\t\t\t\t\t     %c [2]EMPRESA", 254);
@@ -140,7 +142,9 @@ void menu_organizadores(){
 	int opcao, flag;
 	char resp;
 	
-	printf("\n\t%c DIGITE [S] SE JA E CADASTRADO E QUALQUER OUTRA TECLA SE NAO E %c ", 254, 175);
+	printf("\n\t\t\t\t\t\t  VERIFICACAO DE ORGANIZADOR");
+	printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ");  
+	printf("\n\n\t%c DIGITE [S] SE JA E CADASTRADO E QUALQUER OUTRA TECLA SE NAO E %c ", 254, 175);
 	fflush(stdin);
 	resp = getchar();
 	resp = toupper(resp);
@@ -151,16 +155,16 @@ void menu_organizadores(){
 	do{
 		system("cls");
 		printf("\n\n\n\n\n\n\n\n");
-		printf("\n                                  ษอออออออออออออออออ MENU ORGANIZADOR ออออออออออออออออ%c\n", 187);
-		printf("                                  บ                                                   บ\n");
-		printf("                                  บ                   %c 1[ACESSO A INFORMACOES]       บ\n", 254);
-		printf("                                  บ                   %c 2[STANDS]                     บ\n", 254);
-	    printf("                                  บ                   %c 3[PATROCINIO TOTAL]           บ\n", 254);
-		printf("                                  บ                   %c 4[ORGANIZAR CADASTROS]        บ\n", 254);
-		printf("                                  บ                   %c 5[DADOS ESTATISTICOS]         บ\n", 254);
-		printf("                                  บ                   %c 6[VOLTAR AO INICIO]           บ\n", 254);
-		printf("                                  บ                                                   บ\n");
-		printf("                                  ศอออออออออออออออออออออออออออออออออออออออออออออออออออ%c", 188);
+		printf("\n                                  ษอออออออออออออออออ MENU ORGANIZADOR อออออออออออออออออ%c\n", 187);
+		printf("                                  บ                                                    บ\n");
+		printf("                                  บ                %c 1[ACESSO A INFORMACOES]           บ\n", 254);
+		printf("                                  บ                %c 2[STANDS]                         บ\n", 254);
+	    printf("                                  บ                %c 3[PATROCINIO TOTAL]               บ\n", 254);
+		printf("                                  บ                %c 4[ORGANIZAR CADASTROS]            บ\n", 254);
+		printf("                                  บ                %c 5[DADOS ESTATISTICOS]             บ\n", 254);
+		printf("                                  บ                %c 6[VOLTAR AO INICIO]               บ\n", 254);
+		printf("                                  บ                                                    บ\n");
+		printf("                                  ศออออออออออออออออออออออออออออออออออออออออออออออออออออ%c", 188);
 		printf("\n\t\t\t\t\t\t\t%c OPCAO %c", 254, 175);
 		opcao = getch();
 		if(opcao != '1' && opcao != '2' && opcao != '3' && opcao != '4' && opcao != '5' && opcao != '6'){
@@ -172,7 +176,7 @@ void menu_organizadores(){
 			case '2': stands(); break;
 			case '3': mostra_patrocinio(); break;
 			case '4': excluir_cadastro_participante(); break;
-			case '5': ; break;
+			case '5': estatisticas(); break;
 			case '6': main(); break;	
 		}
 	}while(opcao != '6');
@@ -350,23 +354,20 @@ void cad_participantes(int total_stands[]){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
 		return;
 	}
-	//do{
-		//cheio = 0;
-		printf("\n\t\t\t\t\t\t\tCADASTRAR");
-		printf("\n");
-		printf("\n\t%c BEM-VINDO, GAMER. DIGITE SEU NOME %c ", 254, 175);
-		leValidaNome(participante.nome);
-		printf("\n\t%c OLA, %s.", 254, participante.nome);
-		leValidaUsuario(user);
-		strcpy(participante.usuario, user);
-		participante.stand = leValidaStand();
-		participante.deletado = ' ';
-		fwrite(&participante, sizeof(participante), 1, arqPAR);
-		fclose(arqPAR);
-		printf("\n\tCADASTRO REALIZADO COM SUCESSO!");
-		Sleep(1000);
-		menu_participantes();
-	//}while(cheio == 1);
+	printf("\n\t\t\t\t\t\t\tCADASTRAR");
+	printf("\n");
+	printf("\n\t%c BEM-VINDO, GAMER. DIGITE SEU NOME %c ", 254, 175);
+	leValidaNome(participante.nome);
+	printf("\n\t%c OLA, %s.", 254, participante.nome);
+	leValidaUsuario(user);
+	strcpy(participante.usuario, user);
+	participante.stand = leValidaStand();
+	participante.deletado = ' ';
+	fwrite(&participante, sizeof(participante), 1, arqPAR);
+	fclose(arqPAR);
+	printf("\n\tCADASTRO REALIZADO COM SUCESSO!");
+	Sleep(1000);
+	menu_participantes();
 }
 
 void cad_empresas(){
@@ -381,6 +382,9 @@ void cad_empresas(){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
 		return;
 	}
+	system("cls");
+	printf("\n\t\t\t\t\t\t  CADASTRO DE ORGANIZADOR");
+	printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ"); 
 	printf("\n\t%c NOME DA EMPRESA ORGANIZADORA %c ", 254, 175);
 	fflush(stdin);
 	leValidaNome(empresa.nome);
@@ -415,7 +419,7 @@ void alterar_dados_participante(){
 		while(fread(&participante, sizeof(participante), 1, arqPAR) && participante.deletado != '*'){
 			if(strcmp(user, participante.usuario) == 0){
 				mostra_participante(participante);
-				printf("\n\n\t%c ESCOLHA O QUE DESEJA ALTERAR\n", 254, 175);
+				printf("\n\t%c ESCOLHA O QUE DESEJA ALTERAR\n", 254, 175);
 				printf("\n\t%c [1]STAND", 254);
 				printf("\n\t%c [2]USUARIO", 254);
 				printf("\n\t%c OPCAO %c ", 254, 175);
@@ -521,7 +525,23 @@ void leValidaUsuario(char user[]){
 
 char leValidaStand(){
 	gamers participante;
+	int flag = 0;
+	int totalR = 0, totalF = 0, totalE = 0, totalA = 0, totalL = 0, totalC = 0;
+	FILE *arq = fopen("cad_participantes.dat", "rb");
+	
+	while(fread(&participante, sizeof(participante), 1, arq)){
+		switch(participante.stand){
+			case 'F': totalF++; break;
+			case 'R': totalR++; break;
+			case 'E': totalE++; break;
+			case 'A': totalA++; break;
+			case 'L': totalL++; break;
+			case 'C': totalC++; break;					
+		}
+	}
 	do{
+		flag = 0;
+		system("cls");
 		stands();
 		printf("\n\n\t%c ESCOLHA O STAND DE JOGO QUE DESEJA PARTICIPAR %c ", 254, 175);
 		fflush(stdin);
@@ -531,7 +551,33 @@ char leValidaStand(){
             printf("\n\t\t\t\t\t\t    OPCAO INVALIDA!");
             Sleep(800);
 		}
-	}while(participante.stand != 'R' && participante.stand != 'F' && participante.stand != 'A' && participante.stand != 'E' && participante.stand != 'L' && participante.stand != 'C');
+		switch(participante.stand){
+			case 'F': 
+				if(verifica_limite(totalF) == -1)
+					flag = 1;
+				break;
+			case 'R': 
+				if(verifica_limite(totalR) == -1)
+					flag = 1;
+				break;
+			case 'E':
+				if(verifica_limite(totalE) == -1)
+					flag = 1;
+				break;
+			case 'A': 
+				if(verifica_limite(totalA) == -1)
+					flag = 1;
+				break;
+			case 'L': 
+				if(verifica_limite(totalL) == -1)
+					flag = 1;
+				break;
+			case 'C':
+				if(verifica_limite(totalC) == -1)
+					flag = 1;
+				break;					
+		}
+	}while(flag == 1);
 	return participante.stand;
 }
 
@@ -564,7 +610,7 @@ void leValidaSenha(){
 		scanf("%d", &tentativa);
 		while(fread(&empresas, sizeof(empresas), 1, arqEMP) && flag == 0){
 			if(tentativa != empresas.senha){
-				printf("\n\t\t\t\t\t\t    SENHA INVALIDA!");
+				printf("\n\tSENHA INVALIDA!\n");
 				flag = 1;
 				Sleep(800);
 			}
@@ -621,20 +667,45 @@ void leValidaEmailPat(char email[]){
 	}while(flag == 1);
 	fclose(arq);
 }
+
+int verifica_limite(int total){
+	if(total >= 4){
+		printf("\n\tLIMITE ATINGIDO NESTE STAND!");
+		getch();	
+		return -1;			
+	}
+	return 0;
+}
 //------ STANDS ---------------------------------------------------------------------------------------------------------------------------------------
 void stands(){
+	gamers participante;
+	int totalR = 0, totalF = 0, totalE = 0, totalA = 0, totalL = 0, totalC = 0;
+	int m = 20;//Limite
+	FILE *arq = fopen("cad_participantes.dat", "rb");
+	
+	while(fread(&participante, sizeof(participante), 1, arq)){
+		switch(participante.stand){
+			case 'F': totalF++; break;
+			case 'R': totalR++; break;
+			case 'E': totalE++; break;
+			case 'A': totalA++; break;
+			case 'L': totalL++; break;
+			case 'C': totalC++; break;					
+		}
+	}
 	system("cls");
 	printf("\n\t\t\t\t\tษออออออออออออหออออออออออออหออออออออออออ%c", 187);
 	printf("\n\t\t\t\t\tบ    FPS     บ    RPG     บ    ESP     บ");
 	printf("\n\t\t\t\t\tบ            บ            บ            บ");
-	printf("\n\t\t\t\t\tบ  vagas =   บ  vagas =   บ  vagas =   บ");
+	printf("\n\t\t\t\t\tบ  vagas = %dบ  vagas = %dบ  vagas = %dบ", m-totalF, m-totalR, m-totalE);
 	printf("\n\t\t\t\t\tฬออออออออออออฮออออออออออออฮออออออออออออ%c", 185);
 	printf("\n\t\t\t\t\tบ    AVE     บ    LUT     บ    COR     บ");
 	printf("\n\t\t\t\t\tบ            บ            บ            บ");
-	printf("\n\t\t\t\t\tบ  total =   บ  vagas =   บ  vagas =   บ");
+	printf("\n\t\t\t\t\tบ  vagas = %dบ  vagas = %dบ  vagas = %dบ", m-totalA, m-totalL, m-totalC);
 	printf("\n\t\t\t\t\tศออออออออออออสออออออออออออสออออออออออออผ");
-	printf("\n\n\t");
+	printf("\n\n\t\t\t\t\t");
 	system("pause");
+	fclose(arq);
 }
 //------ SOBRE O EVENTO ---------------------------------------------------------------------------------------------------------------------------------------
 void sobre(){
@@ -649,4 +720,70 @@ void sobre(){
 	printf("\n\t");
 	system("pause");
 	main();
+}
+
+void estatisticas(){
+	char op;
+	int totalR = 0, totalF = 0, totalE = 0, totalA = 0, totalL = 0, totalC = 0;
+	int total = 0, max = 120;//Maximo de participantes no evento
+	int p1;
+	gamers participante;
+	FILE *arq = fopen("cad_participantes.dat", "rb");
+	
+	while(fread(&participante, sizeof(participante), 1, arq)){
+		total++;
+		switch(participante.stand){
+			case 'F': totalF++; break;
+			case 'R': totalR++; break;
+			case 'E': totalE++; break;
+			case 'A': totalA++; break;
+			case 'L': totalL++; break;
+			case 'C': totalC++; break;					
+		}
+	}
+	do{
+	system("cls");
+	printf("\n\t%c O QUE DESEJA VER?\n", 254);
+	printf("\n\t%c [T]TOTAL DE PARTICIPANTES", 254); 
+	printf("\n\t%c [P]PORCENTAGEM DE CADA STAND", 254);
+	printf("\n\t%c [R]RANKING DE STANDS", 254);
+	printf("\n\t%c [0]VOLTAR AO MENU DO ORGANIZADOR", 254);
+	printf("\n\t%c ", 175);
+	op = getch();
+	op = toupper(op);
+	switch(op){
+		case 'T':
+			system("cls");
+			printf("\n\tษอออออออออออออออออออออออออออออออออออออออออออ%c", 187);
+			printf("\n\tบ   TOTAL DE PARTICIPANTES DO EVENTO %c  %d   บ", 175, total);
+			printf("\n\tศอออออออออออออออออออออออออออออออออออออออออออผ\n\t");
+			system("pause");
+			break;
+		case 'P':
+			system("cls");
+			printf("\n\tษอออออออออหอออออออออออออออ%c", 187);
+			printf("\n\tบGENERO   บ PORCENTAGEM   บ");
+			printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
+			printf("\n\tบRPG      บ %.2f          บ", (totalR*100)/max);
+			printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
+			printf("\n\tบFPS      บ %.2f          บ", (totalF*100)/max);
+			printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
+			printf("\n\tบESPORTES บ %.2f          บ", (totalE*100)/max);
+			printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
+			printf("\n\tบAVENTURA บ %.2f          บ", (totalA*100)/max);
+			printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
+			printf("\n\tบCORRIDA  บ %.2f          บ", (totalC*100)/max);
+			printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
+			printf("\n\tบLUTA     บ %.2f          บ", (totalF*100)/max);
+			printf("\n\tศอออออออออสอออออออออออออออผ\n\t");
+			system("pause");
+			break;
+		case 'R':
+			break;
+		case '0':
+			system("cls");
+			menu_organizadores();
+			break;			
+	}
+	}while(op != '0');
 }
