@@ -46,7 +46,7 @@ void sobre();
 gamers acessar_dados_participante();
 patrocinadores acessar_dados_patrocinador();
 //----- Mostrar dados ------------------------------------------------------------------------------------------------------------------------------------------- 
-void mostra_patrocinador();
+void mostra_patrocinador(patrocinadores);
 void mostra_participantes();
 void mostra_participante(gamers);
 void mostra_patrocinio();
@@ -110,7 +110,6 @@ void menu_participantes(){
 	
 	do{
 		system("cls");
-		printf("\n\ttotal: %d", total_stands[0]); getch();
 		printf("\n\n\n\n\n\n\n");
 		printf("\n                                  ษอออออออออออออออออ MENU PARTICIPANTE อออออออออออออออ%c\n", 187);
 		printf("                                  บ                                                   บ\n");
@@ -211,7 +210,7 @@ gamers acessar_dados_participante(){
 	int flag = 0, pos = 0;
 	char user[50];
 	
-	arq = fopen("cadastro_participantes.dat", "rb");
+	arq = fopen("cad_participantes.dat", "rb");
 	if(arq == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
 		return;
@@ -226,7 +225,7 @@ gamers acessar_dados_participante(){
 		while(fread(&participante, sizeof(participante), 1, arq)){
 			if(strcmp(user, participante.usuario) == 0){
 				mostra_participante(participante);
-				break;
+				return participante;
 			}
 		}
 		if(strcmp(user, participante.usuario) != 0){
@@ -235,37 +234,39 @@ gamers acessar_dados_participante(){
 		}
 	}while(flag == 1);
 	fclose(arq);
-	return participante;
 }
 
 patrocinadores acessar_dados_patrocinador(){
 	char email[150];
 	int flag = 0;
 	patrocinadores empresa;
-	FILE *arqPAT = fopen("cad_patrocinadores", "rb");
+	FILE *arqPAT = fopen("cad_patrocinadores.dat", "rb");
+	system("cls");
 	do{
 		flag = 0;
-		printf("\n\t%cENDERECO DE EMAIL %c ");
+		rewind(arqPAT);
+		printf("\n\t%c ENDERECO DE EMAIL %c ", 254, 175);
 		fflush(stdin);
 		gets(email);
 		while(fread(&empresa, sizeof(empresa), 1, arqPAT)){
 			if(strcmp(email, empresa.email) == 0){
 				mostra_patrocinador(empresa);
-			}
-			if(strcmp(email, empresa.email) > 0){
-				flag = 1;
-				printf("\n\tENDERECO DE EMAIL NAO CADASTRADO NO SISTEMA! TENTE NOVAMENTE!");
+				return empresa;
 			}
 		}
+		if(strcmp(email, empresa.email) > 0){
+			flag = 1;
+			printf("\n\tENDERECO DE EMAIL NAO CADASTRADO NO SISTEMA! TENTE NOVAMENTE!");
+		}
 	}while(flag == 1);
-	return empresa;
+	fclose(arqPAT);
 }
 //------- MOSTRA DADOS -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void mostra_patrocinador(patrocinadores empresa){
-	printf("\n\t%c NOME %c ", 254, 175, empresa.nome);
-	printf("\n\t%c EMAIL %c ", 254, 175, empresa.email);
-	printf("\n\t%c STAND %c", 254, 175, empresa.stand_escolhido);
-	printf("\n\t %c PATROCINIO %c ", 254, 175, empresa.quantia);
+	printf("\n\t%c NOME %c %s", 254, 175, empresa.nome);
+	printf("\n\t%c EMAIL %c %s", 254, 175, empresa.email);
+	printf("\n\t%c STAND %c %c", 254, 175, empresa.stand_escolhido);
+	printf("\n\t%c PATROCINIO %c R$%.2f", 254, 175, empresa.quantia);
 	printf("\n\n\t");
 	system("pause");
 }
@@ -280,7 +281,7 @@ void mostra_participante(gamers participante){
 
 void mostra_participantes(){
 	gamers participante;
-	FILE *arq = fopen("cadastro_participantes.dat", "rb");
+	FILE *arq = fopen("cad_participantes.dat", "rb");
 	
 	if(arq == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");
@@ -298,11 +299,29 @@ void mostra_participantes(){
 	system("\n\tpause");
 	fclose(arq);
 }
+
+void mostra_patrocinio(){
+	float pat_total = 0;
+	patrocinadores empresa;
+	FILE *arq = fopen("cad_patrocinadores.dat", "rb");
+	
+	system("cls");
+	printf("\n\t\t\t\t\t\t\tPATROCINIOS\n");
+	while(fread(&empresa, sizeof(empresa), 1, arq)){
+		printf("\n\t%c NOME %c %s", 254, 175, empresa.nome);
+		printf("\t\tPATROCINIO %c R$%.2f", 175, empresa.quantia);
+		pat_total += empresa.quantia;
+	}
+	printf("\n\n\t%c PATROCINIO TOTAL %c R$%.2f", 254, 175, pat_total);
+	printf("\n\n\t");
+	system("pause");
+	fclose(arq);
+}
 //------- CADASTROS -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void cad_patrocinadores(){
 	char email[150];
 	patrocinadores empresa;
-	FILE *arqPAT = fopen("cad_patrocinadores", "ab+");
+	FILE *arqPAT = fopen("cad_patrocinadores.dat", "ab+");
 	
 	if(arqPAT == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");
@@ -321,39 +340,18 @@ void cad_patrocinadores(){
 	fclose(arqPAT);
 }
 
-void mostra_patrocinio(){
-	float pat_total = 0;
-	patrocinadores empresa;
-	FILE *arq = fopen("cad_patrocinadores.dat", "rb");
-	
-	system("cls");
-	while(fread(&empresa, sizeof(empresa), 1, arq)){
-		printf("%c NOME %c ", 254, 175, empresa.nome);
-		printf("%c PATROCINIO %c ", 254, 175, empresa.quantia);
-		printf("\n");
-		pat_total += empresa.quantia;
-	}
-	printf("\n\t%c PATROCINIO TOTAL %c ", 254, 175, pat_total);
-	printf("\n\t");
-	system("pause");
-	fclose(arq);
-}
-
 void cad_participantes(int total_stands[]){
 	char user[50], nome[100];
-	int flag = 0, cheio = 0, aux = 0, total = 0, i;
 	gamers participante;
-	FILE *arqPAR = fopen("cadastro_participantes.dat", "ab+");
-	//FILE *stands = fopen("total_stands.dat", "ab+");
+	FILE *arqPAR = fopen("cad_participantes.dat", "ab+");
 
 	system("cls");
 	if(arqPAR == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
 		return;
 	}
-	//fread(&total_stands, sizeof(total_stands), 1, stands);
-	do{
-		cheio = 0;
+	//do{
+		//cheio = 0;
 		printf("\n\t\t\t\t\t\t\tCADASTRAR");
 		printf("\n");
 		printf("\n\t%c BEM-VINDO, GAMER. DIGITE SEU NOME %c ", 254, 175);
@@ -363,34 +361,12 @@ void cad_participantes(int total_stands[]){
 		strcpy(participante.usuario, user);
 		participante.stand = leValidaStand();
 		participante.deletado = ' ';
-		switch(participante.stand){
-			case 0:
-				total_stands[0]++;	
-				break;
-			case 1:
-				total_stands[participante.stand]++;
-				break;
-			case 2:
-				total_stands[2]++;
-				break;
-			case 3:
-				total_stands[3]++;
-				break;
-			case 4:
-				total_stands[4]++;
-				break;
-			case 5:
-				total_stands[5]++;
-				break;
-		}
 		fwrite(&participante, sizeof(participante), 1, arqPAR);
-		//fwrite(&total_stands, sizeof(total_stands), 1, stands);
 		fclose(arqPAR);
-		//fclose(stands);
 		printf("\n\tCADASTRO REALIZADO COM SUCESSO!");
 		Sleep(1000);
 		menu_participantes();
-	}while(cheio == 1);
+	//}while(cheio == 1);
 }
 
 void cad_empresas(){
@@ -400,7 +376,7 @@ void cad_empresas(){
 	organizadores empresa;
 	
 	srand(time(NULL));
-	arqEMP = fopen("organizadores.dat", "ab");
+	arqEMP = fopen("cad_organizadores.dat", "ab");
 	if(arqEMP == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
 		return;
@@ -412,7 +388,7 @@ void cad_empresas(){
 	strcpy(empresa.email, email);
 	senha = 1000 + (rand() % 1000);
 	empresa.senha = senha;
-	printf("\n\n\t%c SENHA DE ACESSO PARA INFORMACOES DO EVENTO %c %d", 254, 175, empresa.senha);
+	printf("\n\t%c SENHA DE ACESSO PARA INFORMACOES DO EVENTO %c %d", 254, 175, empresa.senha);
 	fwrite(&empresa, sizeof(empresa), 1, arqEMP);
 	fclose(arqEMP);
 	printf("\n\n\t");
@@ -423,29 +399,46 @@ void alterar_dados_participante(){
 	int op, flag = 0;
 	char stand, user[50];
 	gamers participante;
-	FILE *arqPAR = fopen("cadastro_participantes.dat", "ab+");
+	FILE *arqPAR = fopen("cad_participantes.dat", "ab+");
 	
 	if(arqPAR == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
 		return;
 	}
-	participante = acessar_dados_participante();
-	printf("\n\t%s", participante.nome);
-	printf("\n\n\t%c ESCOLHA O QUE DESEJA ALTERAR\n", 254, 175);
-	printf("\n\t%c [1]STAND", 254);
-	printf("\n\t%c [2]USUARIO", 254);
-	printf("\n\t%c OPCAO %c ", 254, 175);
-	scanf("%d", &op);
-	switch(op){
-		case 1: participante.stand = leValidaStand(); break;
-		case 2:
-			leValidaUsuario(user);
-			strcpy(participante.usuario, user);
-			break;
-	}
-	fseek(arqPAR, -sizeof(participante), SEEK_CUR);
-	fwrite(&participante, sizeof(participante), 1, arqPAR);
-	fseek(arqPAR, 0, SEEK_CUR);
+	system("cls");
+	do{
+		flag = 0;
+		rewind(arqPAR);
+		printf("\n\t%c USUARIO %c ", 254, 175);
+		fflush(stdin);
+		gets(user);
+		while(fread(&participante, sizeof(participante), 1, arqPAR) && participante.deletado != '*'){
+			if(strcmp(user, participante.usuario) == 0){
+				mostra_participante(participante);
+				printf("\n\n\t%c ESCOLHA O QUE DESEJA ALTERAR\n", 254, 175);
+				printf("\n\t%c [1]STAND", 254);
+				printf("\n\t%c [2]USUARIO", 254);
+				printf("\n\t%c OPCAO %c ", 254, 175);
+				scanf("%d", &op);
+				switch(op){
+					case 1: 
+						participante.stand = leValidaStand();
+						break;
+					case 2:
+						leValidaUsuario(user);
+						strcpy(participante.usuario, user);
+						break;
+				}
+				fseek(arqPAR, -sizeof(participante), SEEK_CUR);
+				fwrite(&participante, sizeof(participante), 1, arqPAR);
+				fseek(arqPAR, 0, SEEK_CUR);
+			}
+		}
+		if(strcmp(user, participante.usuario) != 0){
+			flag = 1;
+			printf("\n\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
+		}
+	}while(flag == 1);
 	fclose(arqPAR);
 }
 
@@ -454,7 +447,7 @@ void excluir_cadastro_participante(){
 	int flag = 0;
 	char user[50], resp;
 	gamers participante;
-	FILE  *arqPAR = fopen("cadastro_participantes.dat", "ab+");
+	FILE  *arqPAR = fopen("cad_participantes.dat", "ab+");
 	
 	if(arqPAR == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");
@@ -481,8 +474,8 @@ void excluir_cadastro_participante(){
 
 void organizar_cads(){
 	gamers participante;
-	FILE *arq = fopen("cadastro_participantes.dat", "rb");
-	FILE *arq2 = fopen("cadastro_participantes.bak", "ab");
+	FILE *arq = fopen("cad_participantes.dat", "rb");
+	FILE *arq2 = fopen("cad_participantes.bak", "ab");
 	
 	if ((arq == NULL) || (arq2 == NULL)) {
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");
@@ -492,8 +485,8 @@ void organizar_cads(){
 		if(participante.deletado != '*')
 			fwrite(&participante, sizeof(participante), 1, arq2);
 	}
-	remove("cadastro_participantes.dat");
-	rename("cadastro_participantes.bak", "cadastro_participantes.dat");	
+	remove("cad_participantes.dat");
+	rename("cad_participantes.bak", "cadastro_participantes.dat");	
 	fclose(arq);
 	fclose(arq2);
 }	
@@ -505,7 +498,7 @@ void leValidaUsuario(char user[]){
 	FILE *arq;
 	int flag = 0;
 	
-	arq = fopen("cadastro_participantes.dat", "ab+");
+	arq = fopen("cad_participantes.dat", "ab+");
 	if(arq == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");
 		return;
@@ -558,7 +551,7 @@ void leValidaNome(char nome[]){
 void leValidaSenha(){
 	int flag = 0, tentativa;
 	organizadores empresas;
-	FILE *arqEMP = fopen("organizadores.dat", "rb");
+	FILE *arqEMP = fopen("cad_organizadores.dat", "rb");
 	
 	if(arqEMP == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
@@ -583,7 +576,7 @@ void leValidaSenha(){
 void leValidaEmailOrg(char email[]){
 	int flag = 0;
 	organizadores empresas;
-	FILE *arq = fopen("organizadores.dat", "rb");
+	FILE *arq = fopen("cad_organizadores.dat", "rb");
 	
 	if(arq == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");
