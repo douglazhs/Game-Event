@@ -15,6 +15,8 @@
 #define ENTER 13
 #define UP 72
 #define DOWN 80
+#define RIGHT 77
+#define LEFT 75
 #define ESC 27
 
 typedef struct{
@@ -83,14 +85,16 @@ void HideCursor(){
   CONSOLE_CURSOR_INFO cursor = {1, FALSE};
   SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor);
 }
+void coloca_bordas();
 //------ MENU PRINCIPAL ----------------------------------------------------------------------------------------------------------------------------------------------
 int main(void){
 	char tecla;
-	int pos = 15;
+	int pos = 15, i = 1;
 
 	HideCursor();
-	do{
+	do{	
 		system("cls");
+		coloca_bordas();
 		printf("\n\t\t\t\t\tUCBG - UNIVERSIDADE CATOLICA DE BRASILIA GAMES\n\n");
 		printf("\n\t\t\t\t\t       //   / / //   ) )  //   ) )  //   ) )"); 
 		printf("\n\t\t\t\t\t      //   / / //        //___/ /  //");        
@@ -165,7 +169,10 @@ void menu_participantes(){
 			case 10: cad_participantes(total_stands); break;
 			case 12: acessar_dados_participante(); break;
 			case 14: alterar_dados_participante(); break;
-			case 16: stands(); break;
+			case 16: 
+					stands();
+					gotoxy(41,13);system("pause");
+					break;
 			case 18: main(); break;
 		}
 	}while(pos != 18);
@@ -233,7 +240,10 @@ void menu_organizadores(){
 		}while(tecla != ENTER);
 		switch(pos){
 			case 11: mostra_participantes(); break;
-			case 13: stands(); break;
+			case 13: 
+				stands();
+				gotoxy(41,13);system("pause");
+				break;
 			case 15: mostra_patrocinio(); break;
 			case 17: excluir_cadastro_participante(); break;
 			case 19: estatisticas(); break;
@@ -453,6 +463,8 @@ void cad_patrocinadores(){
 		return;
 	}
 	system("cls");
+	printf("\n\t\t\t\t\t\t\tCADASTRO DE PATROCINADOR");
+	printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ");
 	printf("\n\t%c NOME DA EMPRESA %c ", 254, 175);
 	fflush(stdin);
 	leValidaNome(empresa.nome);
@@ -475,9 +487,9 @@ void cad_participantes(int total_stands[]){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
 		return;
 	}
-	printf("\n\t\t\t\t\t\t\tCADASTRAR");
+	printf("\n\t\t\t\t\t\t\tCADASTRO DE PARTICIPANTES");
 	printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ");
-	printf("\n\n\t%c BEM-VINDO, GAMER. DIGITE SEU NOME %c ", 254, 175);
+	printf("\n\t%c BEM-VINDO, GAMER. DIGITE SEU NOME %c ", 254, 175);
 	leValidaNome(participante.nome);
 	printf("\n\tOLA, %s.", participante.nome);
 	leValidaUsuario(user);
@@ -486,7 +498,7 @@ void cad_participantes(int total_stands[]){
 	participante.deletado = ' ';
 	fwrite(&participante, sizeof(participante), 1, arqPAR);
 	fclose(arqPAR);
-	printf("\n\tCADASTRO REALIZADO COM SUCESSO!");
+	gotoxy(47, 15);printf("CADASTRO REALIZADO COM SUCESSO!");
 	Sleep(1000);
 	menu_participantes();
 }
@@ -521,51 +533,59 @@ void cad_empresas(){
 }
 //------- ALTERACAO DE DADOS -------------------------------------------------------------------------------------------------------------------------------------------------------------
 void alterar_dados_participante(){
-	int op, flag = 0;
-	char stand, user[50];
+	int op, flag = 0, pos = 4;
+	char stand, user[50], tecla;
 	gamers participante;
-	FILE *arqPAR = fopen("cad_participantes.dat", "ab+");
+	FILE *arqPAR = fopen("cad_participantes.dat", "r+b");
 	
 	if(arqPAR == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
 		return;
 	}
-	ShowCursor(0);
 	do{
 		system("cls");
 		flag = 0;
-		rewind(arqPAR);
 		gotoxy(52,10);printf("ษอออออออออออออออออออออออออ%c", 187);
 		gotoxy(52,11);printf("บ USUARIO:                บ");
 		gotoxy(52,12);printf("ศอออออออออออออออออออออออออผ\n\t");
 		gotoxy(63,11);
 		fflush(stdin);
 		gets(user);
-		while(fread(&participante, sizeof(participante), 1, arqPAR) && participante.deletado != '*'){
-			if(strcmp(user, participante.usuario) == 0){
-				mostra_participante(participante);
+		while(fread(&participante, sizeof(participante), 1, arqPAR) && participante.deletado != '*');
+		if(strcmp(user, participante.usuario) == 0){
+			mostra_participante(participante);
+			do{
+				system("cls");
 				printf("\n\tESCOLHA O QUE DESEJA ALTERAR\n", 175);
-				printf("\n\t%c [1]STAND", 254);
-				printf("\n\t%c [2]USUARIO", 254);
-				printf("\n\n\t%c OPCAO %c ", 254, 175);
-				scanf("%d", &op);
-				switch(op){
-					case 1: 
-						participante.stand = leValidaStand();
-						break;
-					case 2:
-						leValidaUsuario(user);
-						strcpy(participante.usuario, user);
-						break;
-				}
-				fseek(arqPAR, -sizeof(participante), SEEK_CUR);
-				fwrite(&participante, sizeof(participante), 1, arqPAR);
-				fseek(arqPAR, 0, SEEK_CUR);
+				printf("\n\t%c STAND", 254);
+				printf("\n\t%c USUARIO", 254);
+				gotoxy(19, pos);printf("%c", 174);
+				tecla = getch();
+				if(tecla == DOWN)
+					pos += 1;
+				if(tecla == UP)
+					pos -= 1;
+				if(pos > 5)
+					pos = 4;
+				if(pos < 4)
+					pos = 5;
+			}while(tecla != ENTER);
+			switch(pos){
+				case 4: 
+					participante.stand = leValidaStand();
+					break;
+				case 5:
+					leValidaUsuario(user);
+					strcpy(participante.usuario, user);
+					break;
 			}
+			fseek(arqPAR, -sizeof(participante), SEEK_CUR);
+			fwrite(&participante, sizeof(participante), 1, arqPAR);
 		}
 		if(strcmp(user, participante.usuario) != 0){
 			flag = 1;
-			printf("\n\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
+			printf("\n\t\t\t\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
+			Sleep(200);
 		}
 	}while(flag == 1);
 	fclose(arqPAR);
@@ -573,8 +593,8 @@ void alterar_dados_participante(){
 
 //------ EXCLUIR CADASTRO DE PARTICIPANTE ---------------------------------------------------------------------------------------------------------------------------------------
 void excluir_cadastro_participante(){
-	int flag = 0;
-	char user[50], resp;
+	int flag = 0, pos = 4;
+	char user[50], tecla;
 	gamers participante;
 	FILE  *arqPAR = fopen("cad_participantes.dat", "ab+");
 	
@@ -582,32 +602,62 @@ void excluir_cadastro_participante(){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");
 		return;
 	}
-	system("cls");
-	printf("\n\t\t\t\t\t        EXCLUSAO DE CADASTROS");
-	printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ"); 
-	participante = acessar_dados_participante(); 
-	printf("\n\t%c TEM CERTEZA QUE DESEJA FAZER A EXCLUSAO?", 254);
-	printf("\n\t%c [S][N] %c ", 254, 175);
-	resp = getch();
-	resp = toupper(resp);
-	if(resp == 'S'){
-		participante.deletado = '*';
-		fseek(arqPAR, -sizeof(participante), SEEK_CUR);
-		fwrite(&participante, sizeof(participante), 1, arqPAR);
-		fseek(arqPAR, 0, SEEK_CUR);
-		organizar_cads();	
-		printf("\n\n\tEXCLUSAO FEITA COM SUCESSO");
-		Sleep(1000);
+	do{
+		system("cls");
+		printf("\n\t\t\t\t\t        EXCLUSAO DE CADASTROS");
+		printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ");
+		printf("\n\t%c EXCLUIR PARTICIPANTE", 254);
+		printf("\n\t%c ORGANIZAR CADASTROS", 254);
+		gotoxy(30, pos);printf("%c", 174);
+		tecla = getch();
+		if(tecla == DOWN)
+			pos += 1;
+		if(tecla == UP)
+			pos -= 1;
+		if(pos > 5)
+			pos = 4;
+		if(pos < 4)
+			pos = 5;
+	}while(tecla != ENTER);
+	switch(pos){
+		case 4:
+			do{
+				system("cls");
+				flag = 0;
+				gotoxy(52,10);printf("ษอออออออออออออออออออออออออ%c", 187);
+				gotoxy(52,11);printf("บ USUARIO:                บ");
+				gotoxy(52,12);printf("ศอออออออออออออออออออออออออผ\n\t");
+				gotoxy(63,11);
+				fflush(stdin);
+				gets(user);
+				while(fread(&participante, sizeof(participante), 1, arqPAR));
+				if(strcmp(user, participante.usuario) == 0){
+					mostra_participante(participante);
+					participante.deletado = '*';
+					fseek(arqPAR, -sizeof(participante), SEEK_CUR);
+					fwrite(&participante, sizeof(participante), 1, arqPAR);
+				}
+				if(strcmp(user, participante.usuario) != 0){
+					flag = 1;
+					printf("\n\t\t\t\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!");
+					Sleep(200);
+				}
+			}while(flag == 1);
+			break;
+		case 5:
+			organizar_cads();
+			break;
 	}
+	organizar_cads();	
 	fclose(arqPAR);
 }
 
 void organizar_cads(){
 	gamers participante;
-	FILE *arq = fopen("cad_participantes.dat", "rb");
-	FILE *arq2 = fopen("cad_participantes.bak", "ab");
+	FILE *arq = fopen("cad_participantes.dat", "r+b");
+	FILE *arq2 = fopen("cad_participantes.bak", "a+b");
 	
-	if ((arq == NULL) || (arq2 == NULL)) {
+	if ((arq == NULL) || (arq2 == NULL)){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");
 		return;
 	}
@@ -616,7 +666,7 @@ void organizar_cads(){
 			fwrite(&participante, sizeof(participante), 1, arq2);
 	}
 	remove("cad_participantes.dat");
-	rename("cad_participantes.bak", "cadastro_participantes.dat");	
+	rename("cad_participantes.bak", "cad_participantes.dat");	
 	fclose(arq);
 	fclose(arq2);
 }	
@@ -670,8 +720,9 @@ char leValidaStandPat(){
 
 char leValidaStand(){
 	gamers participante;
-	int flag = 0;
+	int flag = 0, posY = 6, posX = 48;
 	int totalR = 0, totalF = 0, totalE = 0, totalA = 0, totalL = 0, totalC = 0;
+	char tecla;
 	FILE *arq = fopen("cad_participantes.dat", "rb");
 	
 	while(fread(&participante, sizeof(participante), 1, arq)){
@@ -686,42 +737,58 @@ char leValidaStand(){
 	}
 	do{
 		flag = 0;
-		system("cls");
-		stands();
-		printf("\n\n\t%c ESCOLHA O STAND DE JOGO QUE DESEJA PARTICIPAR %c ", 254, 175);
-		fflush(stdin);
-		participante.stand = getchar();
-		participante.stand = toupper(participante.stand);
-		if(participante.stand != 'R' && participante.stand != 'F' && participante.stand != 'A' && participante.stand != 'E' && participante.stand != 'L' && participante.stand != 'C'){
-            printf("\n\t\t\t\t\t\t    OPCAO INVALIDA!");
-            flag = 1;
-            Sleep(800);
-		}
-		switch(participante.stand){
-			case 'F': 
-				if(verifica_limite(totalF) == -1)
-					flag = 1;
+		do{
+			stands();
+			gotoxy(53,13);printf("%cESCOLHA O STAND%c",174, 175);
+			gotoxy(posX, posY);printf("%c", 178);
+			tecla = getch();
+			if(tecla == DOWN)
+				posY+=4;
+			if(tecla == UP)
+				posY-=4;
+			if(tecla == RIGHT)
+				posX+=13;
+			if(tecla == LEFT)
+				posX-=13;	
+			if(posY > 10)
+				posY=6;
+			if(posY < 6)
+				posY=10;
+			if(posX > 74)
+				posX = 48;
+			if(posX < 48)
+				posX = 74;				
+		}while(tecla != ENTER);
+		switch(posY){
+			case 6:
+				if(posX == 48){
+					participante.stand = 'F';
+					if(verifica_limite(totalF) == -1)
+						flag = 1;
+				}else if(posX == 60){
+					participante.stand = 'R';
+					if(verifica_limite(totalR) == -1)
+						flag = 1;
+				}else if(posX == 72){
+					participante.stand = 'E';
+					if(verifica_limite(totalE) == -1)
+						flag = 1;
+				}
 				break;
-			case 'R': 
-				if(verifica_limite(totalR) == -1)
-					flag = 1;
-				break;
-			case 'E':
-				if(verifica_limite(totalE) == -1)
-					flag = 1;
-				break;
-			case 'A': 
-				if(verifica_limite(totalA) == -1)
-					flag = 1;
-				break;
-			case 'L': 
-				if(verifica_limite(totalL) == -1)
-					flag = 1;
-				break;
-			case 'C':
-				if(verifica_limite(totalC) == -1)
-					flag = 1;
-				break;					
+			case 10:
+				if(posX == 48){
+					participante.stand = 'A';
+					if(verifica_limite(totalA) == -1)
+						flag = 1;
+				}else if(posX == 60){
+					participante.stand = 'L';
+					if(verifica_limite(totalL) == -1)
+						flag = 1;
+				}else if(posX == 72){
+					participante.stand = 'C';
+					if(verifica_limite(totalC) == -1)
+						flag = 1;
+				}				
 		}
 	}while(flag == 1);
 	return participante.stand;
@@ -858,7 +925,6 @@ void stands(){
 	printf("\n\t\t\t\t\tบ  vagas = %dบ  vagas = %dบ  vagas = %dบ", m-totalA, m-totalL, m-totalC);
 	printf("\n\t\t\t\t\tศออออออออออออสออออออออออออสออออออออออออผ");
 	printf("\n\n\t\t\t\t\t");
-	system("pause");
 	fclose(arq);
 }
 
@@ -895,104 +961,137 @@ void sobre(){
 }
 
 void estatisticas(){
-	char op, nome_maior_pat[50];
-	int totalR = 0, totalF = 0, totalE = 0, totalA = 0, totalL = 0, totalC = 0;
+	char op, nome_maior_pat[50], tecla;
+	int totalR = 0, totalF = 0, totalE = 0, totalA = 0, totalL = 0, totalC = 0, total = 0, pos = 10, totalS[6], i = 0, maior;
+	int max = 120;//Maximo de participantes no evento
 	float p1, p2, p3, p4, p5, p6, maior_patrocinio = 0;
-	int total = 0, max = 12;//Maximo de participantes no evento
 	gamers participante;
 	FILE *arq = fopen("cad_participantes.dat", "rb");
 	FILE *arqPAT = fopen("cad_patrocinadores.dat", "rb");
 	
+	for(i = 0; i < 6; i++)
+		totalS[i] = 0;
 	while(fread(&participante, sizeof(participante), 1, arq)){
 		total++;
 		switch(participante.stand){
-			case 'F': totalF++; break;
-			case 'R': totalR++; break;
-			case 'E': totalE++; break;
-			case 'A': totalA++; break;
-			case 'L': totalL++; break;
-			case 'C': totalC++; break;					
+			case 'F': 
+				//totalF++;
+				totalS[0]++;
+				break;
+			case 'R': 
+				//totalR++;
+				totalS[1]++; 
+				break;
+			case 'E': 
+				//totalE++;
+				totalS[2]++; 
+				break;
+			case 'A': 
+				//totalA++;
+				totalS[3]++; 
+				break;
+			case 'L': 
+				//totalL++;
+				totalS[4]++; 
+				break;
+			case 'C': 
+				//totalC++;
+				totalS[5]++; 
+				break;					
 		}
 	}
 	do{
-	system("cls");
-	printf("\n\tO QUE DESEJA VER?\n", 254);
-	printf("\n\t%c [T]TOTAL DE PARTICIPANTES\n", 254); 
-	printf("\n\t%c [P]PORCENTAGEM DE CADA STAND\n", 254);
-	printf("\n\t%c [R]MAIS RENTAVEIS\n", 254);
-	printf("\n\t%c [S]STAND COM MAIOR PATROCINIO\n", 254);
-	printf("\n\t%c [0]VOLTAR AO MENU DO ORGANIZADOR\n", 254);
-	printf("\n\t%c ", 175);
-	op = getch();
-	op = toupper(op);
-	switch(op){
-		case 'T':
+		do{
 			system("cls");
-			printf("\n\tษอออออออออออออออออออออออออออออออออออออออออออ%c", 187);
-			printf("\n\tบ   TOTAL DE PARTICIPANTES DO EVENTO %c  %d   บ", 175, total);
-			printf("\n\tศอออออออออออออออออออออออออออออออออออออออออออผ\n\t");
-			system("pause");
-			break;
-		case 'P':
-			
-			system("cls");
-			printf("\n\tษอออออออออหอออออออออออออออ%c", 187);
-			printf("\n\tบGENERO   บ PORCENTAGEM   บ");
-			printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
-			printf("\n\tบRPG      บ %8.2f      บ", p1 = (totalR*100)/max);
-			printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
-			printf("\n\tบFPS      บ %8.2f      บ", p2 = (totalF*100)/max);
-			printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
-			printf("\n\tบESPORTES บ %8.2f      บ", p3 = (totalE*100)/max);
-			printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
-			printf("\n\tบAVENTURA บ %8.2f      บ", p4 = (totalA*100)/max);
-			printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
-			printf("\n\tบCORRIDA  บ %8.2f      บ", p5 = (totalC*100)/max);
-			printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
-			printf("\n\tบLUTA     บ %8.2f      บ", p6 = (totalL*100)/max);
-			printf("\n\tศอออออออออสอออออออออออออออผ\n\t");
-			system("pause");
-			break;
-		case 'R':
-			system("cls");
-			printf("\n\tษอออออออออออออออออออออออออออออออออ%c", 187);
-			printf("\n\tบ   MAIS RENTAVEL %c               บ", 175);
-			printf("\n\tศอออออออออออออออออออออออออออออออออผ\n");
-			if(totalR > totalF && totalR > totalE && totalR > totalA && totalR > totalC && totalR > totalL){
-				gotoxy(30,3);printf("RPG");
-			}else if(totalF > totalR && totalF > totalE && totalF > totalA && totalF > totalC && totalF > totalL){
-				gotoxy(30,3);printf("FPS");
-			}else if(totalE > totalF && totalE > totalR && totalE > totalA && totalE > totalC && totalE > totalL){
-				gotoxy(30,3);printf("ESPORTE");
-			}else if(totalA > totalF && totalA > totalE && totalA > totalR && totalA > totalC && totalA > totalL){
-				gotoxy(30,3);printf("AVENTURA");
-			}else if(totalC > totalF && totalC > totalE && totalC > totalR && totalC > totalA && totalC > totalL){
-				gotoxy(30,3);printf("CORRIDA");
-			}else if(totalL > totalF && totalL > totalE && totalL > totalA && totalL > totalC && totalL > totalR){
-				gotoxy(30,3);printf("LUTA");
-			}
-			printf("\n\n\t");	
-			system("pause");				
-			break;
-		case 'S':
-			maior_patrocinio = maior_pat(nome_maior_pat);
-			system("cls");
-			printf("\n\tษออออออออออออออออออออออออออออออ%c", 187);
-			printf("\n\tบ   %c PATROCINIO %c             บ", 254, 175);
-			printf("\n\tฬออออออออออออออออออออออออออออออ%c", 185);
-			printf("\n\tบ   %c STAND %c                  บ", 254, 175);
-			printf("\n\tศออออออออออออออออออออออออออออออผ");
-			gotoxy(28,3);printf("%.2f", maior_patrocinio);
-			gotoxy(23,5);printf("%s", nome_maior_pat);
-			printf("\n\n\t");
-			system("pause");
-			break;
-		case '0':
-			system("cls");
-			menu_organizadores();
-			break;			
-	}
-	}while(op != '0');
+			gotoxy(45,9);printf("ษอออออออออออออออออออออออออออออออออออออออ%c", 187);
+			gotoxy(45,10);printf("บ    %c TOTAL DE PARTICIPANTES           บ", 254);
+			gotoxy(45,11);printf("ฬอออออออออออออออออออออออออออออออออออออออ%c", 185);
+			gotoxy(45,12);printf("บ    %c PORCENTAGEM DE CADA STAND        บ", 254);
+			gotoxy(45,13);printf("ฬอออออออออออออออออออออออออออออออออออออออ%c", 185);
+			gotoxy(45,14);printf("บ    %c MAIS RENTAVEIS                   บ", 254);
+			gotoxy(45,15);printf("ฬอออออออออออออออออออออออออออออออออออออออ%c", 185);
+			gotoxy(45,16);printf("บ    %c STAND COM MAIOR PATROCINIO       บ", 254);
+			gotoxy(45,17);printf("ฬอออออออออออออออออออออออออออออออออออออออ%c", 185);
+			gotoxy(45,18);printf("บ    %c VOLTAR AO MENU DO ORGANIZADOR    บ", 254);
+			gotoxy(45,19);printf("ศอออออออออออออออออออออออออออออออออออออออผ");
+			gotoxy(82, pos);printf("%c", 174);
+			tecla = getch();
+			if(tecla == DOWN)
+				pos += 2;
+			if(tecla == UP)
+				pos -= 2;
+			if(pos > 18)
+				pos = 10;
+			if(pos < 10)
+				pos = 18;
+		}while(tecla != ENTER);
+		switch(pos){
+			case 10:
+				system("cls");
+				printf("\n\tษอออออออออออออออออออออออออออออออออออออออออออ%c", 187);
+				printf("\n\tบ   TOTAL DE PARTICIPANTES DO EVENTO %c  %d   บ", 175, total);
+				printf("\n\tศอออออออออออออออออออออออออออออออออออออออออออผ\n\t");
+				system("pause");
+				break;
+			case 12:
+				system("cls");
+				printf("\n\tษอออออออออหอออออออออออออออ%c", 187);
+				printf("\n\tบGENERO   บ PORCENTAGEM   บ");
+				printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
+				printf("\n\tบRPG      บ %8.2f      บ", p1 = (totalR*100)/max);
+				printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
+				printf("\n\tบFPS      บ %8.2f      บ", p2 = (totalF*100)/max);
+				printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
+				printf("\n\tบESPORTES บ %8.2f      บ", p3 = (totalE*100)/max);
+				printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
+				printf("\n\tบAVENTURA บ %8.2f      บ", p4 = (totalA*100)/max);
+				printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
+				printf("\n\tบCORRIDA  บ %8.2f      บ", p5 = (totalC*100)/max);
+				printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
+				printf("\n\tบLUTA     บ %8.2f      บ", p6 = (totalL*100)/max);
+				printf("\n\tศอออออออออสอออออออออออออออผ\n\t");
+				system("pause");
+				break;
+			case 14:
+				system("cls");
+				printf("\n\tษอออออออออออออออออออออออออออออออออ%c", 187);
+				printf("\n\tบ   MAIS RENTAVEL %c               บ", 175);
+				printf("\n\tศอออออออออออออออออออออออออออออออออผ\n");
+				if(totalR > totalF && totalR > totalE && totalR > totalA && totalR > totalC && totalR > totalL){
+					gotoxy(30,3);printf("RPG");
+				}else if(totalF > totalR && totalF > totalE && totalF > totalA && totalF > totalC && totalF > totalL){
+					gotoxy(30,3);printf("FPS");
+				}else if(totalE > totalF && totalE > totalR && totalE > totalA && totalE > totalC && totalE > totalL){
+					gotoxy(30,3);printf("ESPORTE");
+				}else if(totalA > totalF && totalA > totalE && totalA > totalR && totalA > totalC && totalA > totalL){
+					gotoxy(30,3);printf("AVENTURA");
+				}else if(totalC > totalF && totalC > totalE && totalC > totalR && totalC > totalA && totalC > totalL){
+					gotoxy(30,3);printf("CORRIDA");
+				}else if(totalL > totalF && totalL > totalE && totalL > totalA && totalL > totalC && totalL > totalR){
+					gotoxy(30,3);printf("LUTA");
+				}
+				printf("\n\n\t");	
+				system("pause");				
+				break;
+			case 16:
+				maior_patrocinio = maior_pat(nome_maior_pat);
+				system("cls");
+				printf("\n\tษออออออออออออออออออออออออออออออ%c", 187);
+				printf("\n\tบ   %c PATROCINIO %c             บ", 254, 175);
+				printf("\n\tฬออออออออออออออออออออออออออออออ%c", 185);
+				printf("\n\tบ   %c STAND %c                  บ", 254, 175);
+				printf("\n\tศออออออออออออออออออออออออออออออผ");
+				gotoxy(28,3);printf("%.2f", maior_patrocinio);
+				gotoxy(23,5);printf("%s", nome_maior_pat);
+				printf("\n\n\t");
+				system("pause");
+				break;
+			case 18:
+				system("cls");
+				menu_organizadores();
+				break;			
+		}
+	}while(pos != 18);
 }
 //------ Mostrar o nome dos stands ----------------------------------------------------------------------------------------------------------------------------------------
 void copia_nome(char nome[], char stand){
@@ -1038,5 +1137,24 @@ float maior_pat(char stand[]){
 				patL+=empresa.quantia;		
 		}
 	}
+	
 	return maior;
+}
+
+void coloca_bordas(){
+	int i;
+	
+	gotoxy(2, 29);printf("Versao 1.0 %c Todos os direitos reservados.", 175, 175);
+	for(i = 0; i < 30; i++){
+		gotoxy(1,i);printf("บ");
+		gotoxy(120,i);printf("บ");
+	}
+	gotoxy(1,30);printf("ศ");
+	gotoxy(120,30);printf("ผ");
+	for(i = 0; i < 120; i++){
+		gotoxy(i,1);printf("อ");
+		gotoxy(i,30);printf("อ");
+	}
+	gotoxy(1,1);printf("ษ");
+	gotoxy(120,1);printf("%c", 187);
 }
