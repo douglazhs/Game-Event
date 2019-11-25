@@ -1,16 +1,17 @@
+#define R "\e[1;31m"
+#define B "\x1b[0m"
+
 void gotoxy(int, int);
+void estatisticas();
 void cad_participantes();
 void cad_organizadores();
 void cad_patrocinadores();
 void cad_empresas();
-void stands();
-void stands_patrocinador();
-void sobre();
-void estatisticas();
 void mostra_patrocinio();
 void mostra_patrocinador(patrocinadores);
 void mostra_participante(gamers);
 void mostra_participantes();
+void mostra_patrocinadores();
 void alterar_dados_participante();
 void excluir_cadastro_participante();
 void organizar_cads();
@@ -36,7 +37,7 @@ void menu_participantes(){
 			printf("\n\t\t\t\t\t\tฬอออออออออออออออออออออออออออ%c", 185);
 			gotoxy(49,18);printf("บ    %c VOLTAR AO INICIO     บ", 254);
 			printf("\n\t\t\t\t\t\tศอออออออออออออออออออออออออออผ");
-			gotoxy(75, pos);printf("%c", 174);
+			gotoxy(75, pos);printf(R"%c"B, 174);
 			tecla = getch();
 			if(tecla == DOWN)
 				pos += 2;
@@ -66,27 +67,30 @@ void menu_organizadores(){
 	char tecla;
 	do{
 		system("cls");
-		printf("\n\t\t\t\t\t\t  VERIFICACAO DE ORGANIZADOR");
+		printf("\n\t\t\t\t\t\t VERIFICACAO DE ORGANIZADOR");
 		printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ");  
-		gotoxy(5,5);printf("%c SOU CADASTRADO ", 254);
-		gotoxy(5,6);printf("%c DESEJO ME CADASTRAR", 254);
-		gotoxy(27, pos);printf("%c", 174);
+		printf("\n\t\t\t\t\t     ษออออออออออออออออออออออออออออออ%c", 187);
+		printf("\n\t\t\t\t\t     บ   %c SOU CADASTRADO           บ", 254);
+		printf("\n\t\t\t\t\t     ฬออออออออออออออออออออออออออออออ%c", 185);
+		printf("\n\t\t\t\t\t     บ   %c DESEJO ME CADASTRAR      บ", 254);
+		printf("\n\t\t\t\t\t     ศออออออออออออออออออออออออออออออผ");
+		gotoxy(75, pos);printf(R"%c"B, 174);
 		fflush(stdin);
 		tecla = getch();
 		if(tecla == DOWN)
-			pos += 1;
+			pos += 2;
 		if(tecla == UP)
-			pos -= 1;
-		if(pos > 6)
+			pos -= 2;
+		if(pos > 7)
 			pos = 5;
 		if(pos < 5)
-			pos = 6;
+			pos = 7;
 	}while(tecla != ENTER);
 	switch(pos){
 		case 5:
 			leValidaSenha();
 			break;
-		case 6:
+		case 7:
 			cad_empresas();
 			break;
 	}
@@ -108,7 +112,7 @@ void menu_organizadores(){
 			printf("\n\t\t\t\t\t\tฬออออออออออออออออออออออออออออออ%c", 185);
 			gotoxy(49,21);printf("บ     %c VOLTAR AO INICIO       บ", 254);
 			printf("\n\t\t\t\t\t\tศออออออออออออออออออออออออออออออผ");
-			gotoxy(77, pos);printf("%c", 174);
+			gotoxy(77, pos);printf(R"%c"B, 174);
 			fflush(stdin);
 			tecla = getch();
 			if(tecla == DOWN)
@@ -149,7 +153,7 @@ void menu_patrocinadores(){
 			printf("\n\t\t\t\t\t\tฬออออออออออออออออออออออออออออออ%c", 185);
 			gotoxy(49,15);printf("บ     %c VOLTAR AO INICIO       บ", 254);
 			printf("\n\t\t\t\t\t\tศออออออออออออออออออออออออออออออผ");
-			gotoxy(78, pos);printf("%c", 174);
+			gotoxy(78, pos);printf(R"%c"B, 174);
 			tecla = getch();
 			if(tecla == DOWN)
 					pos += 2;

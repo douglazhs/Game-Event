@@ -4,17 +4,18 @@
 #define RIGHT 77
 #define LEFT 75
 #define ESC 27
+#define R "\e[1;31m"
+#define B "\x1b[0m"
 
 void stands();
 void stands_patrocinador();
 void gotoxy(int, int);
+int verifica_limite(int);
 
 void leValidaUsuario(char user[]){
 	gamers participante;
-	FILE *arq;
 	int flag = 0;
-	
-	arq = fopen("cad_participantes.dat", "ab+");
+	FILE *arq = fopen("cad_participantes.dat", "ab+");
 	if(arq == NULL){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");
 		return;
@@ -42,7 +43,7 @@ char leValidaStandPat(){
 	do{
 		stands_patrocinador();
 		gotoxy(53,13);printf("%cESCOLHA O STAND%c",174, 175);
-		gotoxy(posX, posY);printf("%c", 178);
+		gotoxy(posX, posY);printf(R"%c"B, 178);
 		tecla = getch();
 		if(tecla == DOWN)
 			posY+=4;
@@ -65,17 +66,17 @@ char leValidaStandPat(){
 		case 6:
 			if(posX == 48)
 				stand = 'F';
-			else if(posX == 60)
+			else if(posX == 61)
 				stand = 'R';
-			else if(posX == 72)
+			else if(posX == 74)
 				stand = 'E';
 			break;
 		case 10:
 			if(posX == 48)
 				stand = 'A';
-			else if(posX == 60)
+			else if(posX == 61)
 				stand = 'L';
-			else if(posX == 72)
+			else if(posX == 74)
 				stand = 'C';
 			break;	
 		}
@@ -86,7 +87,7 @@ char leValidaStand(){
 	gamers participante;
 	int flag = 0, posY = 6, posX = 48;
 	int totalR = 0, totalF = 0, totalE = 0, totalA = 0, totalL = 0, totalC = 0;
-	char tecla;
+	char tecla, stand;
 	FILE *arq = fopen("cad_participantes.dat", "rb");
 	
 	while(fread(&participante, sizeof(participante), 1, arq)){
@@ -104,7 +105,7 @@ char leValidaStand(){
 		do{
 			stands();
 			gotoxy(53,13);printf("%cESCOLHA O STAND%c",174, 175);
-			gotoxy(posX, posY);printf("%c", 178);
+			gotoxy(posX, posY);printf(R"%c"B, 178);
 			tecla = getch();
 			if(tecla == DOWN)
 				posY+=4;
@@ -126,36 +127,36 @@ char leValidaStand(){
 		switch(posY){
 			case 6:
 				if(posX == 48){
-					participante.stand = 'F';
+					stand = 'F';
 					if(verifica_limite(totalF) == -1)
 						flag = 1;
-				}else if(posX == 60){
-					participante.stand = 'R';
+				}else if(posX == 61){
+					stand = 'R';
 					if(verifica_limite(totalR) == -1)
 						flag = 1;
-				}else if(posX == 72){
-					participante.stand = 'E';
+				}else if(posX == 74){
+					stand = 'E';
 					if(verifica_limite(totalE) == -1)
 						flag = 1;
 				}
 				break;
 			case 10:
 				if(posX == 48){
-					participante.stand = 'A';
+					stand = 'A';
 					if(verifica_limite(totalA) == -1)
 						flag = 1;
-				}else if(posX == 60){
-					participante.stand = 'L';
+				}else if(posX == 61){
+					stand = 'L';
 					if(verifica_limite(totalL) == -1)
 						flag = 1;
-				}else if(posX == 72){
-					participante.stand = 'C';
+				}else if(posX == 74){
+					stand = 'C';
 					if(verifica_limite(totalC) == -1)
 						flag = 1;
 				}				
 		}
 	}while(flag == 1);
-	return participante.stand;
+	return stand;
 }
 
 void leValidaNome(char nome[]){
@@ -172,7 +173,7 @@ void leValidaNome(char nome[]){
 }
 
 void leValidaSenha(){
-	int flag = 0, tentativa;
+	int flag = 0, tentativa, i=0;
 	organizadores empresas;
 	FILE *arqEMP = fopen("cad_organizadores.dat", "rb");
 	
@@ -187,14 +188,16 @@ void leValidaSenha(){
 		gotoxy(52,10);printf("ษอออออออออออออออออออ%c", 187);
 		gotoxy(52,11);printf("บ SENHA:            บ");
 		gotoxy(52,12);printf("ศอออออออออออออออออออผ\n\t");
-		gotoxy(60,11);
+		gotoxy(61,11);
 		scanf("%d", &tentativa);
-		while(fread(&empresas, sizeof(empresas), 1, arqEMP) && flag == 0){
-			if(tentativa != empresas.senha){
-				gotoxy(55,13);printf("SENHA INVALIDA!");
-				flag = 1;
-				Sleep(800);
-			}
+		while(fread(&empresas, sizeof(empresas), 1, arqEMP)){
+			if(tentativa == empresas.senha)
+				return;
+		}
+		if(tentativa != empresas.senha){
+			gotoxy(55,13);printf("SENHA INVALIDA!");
+			flag = 1;
+			Sleep(800);
 		}
 	}while(flag == 1);
 	fclose(arqEMP);
@@ -250,12 +253,10 @@ void leValidaEmailPat(char email[]){
 }
 
 int verifica_limite(int total){
-	if(total >= 4){
+	if(total >= 20){
 		printf("\n\tLIMITE ATINGIDO NESTE STAND!");
 		getch();	
 		return -1;			
 	}
 	return 0;
 }
-
-
