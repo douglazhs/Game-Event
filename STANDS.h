@@ -43,28 +43,28 @@ void stands(){
 	printf("\n様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様");
 	while(fread(&empresa, sizeof(empresa), 1, arqPAT)){
 		switch(empresa.stand_escolhido){
-			case 'R':
-				gotoxy(5,pos1+2);printf("%s", empresa.nome);
+			case 'F':
+				gotoxy(5,pos1+2);printf("%c %s", 175, empresa.nome);
 				pos1+=1;
 				break;	
-			case 'F':
-				gotoxy(30,pos2+2);printf("%s", empresa.nome);
+			case 'R':
+				gotoxy(30,pos2+2);printf("%c %s", 175, empresa.nome);
 				pos2+=1;
 				break;
 			case 'E':
-				gotoxy(50,pos3+2);printf("%s", empresa.nome);
+				gotoxy(50,pos3+2);printf("%c %s", 175, empresa.nome);
 				pos3+=1;
 				break;
 			case 'A':
-				gotoxy(70,pos4+2);printf("%s", empresa.nome);
+				gotoxy(70,pos4+2);printf("%c %s", 175, empresa.nome);
 				pos4+=1;
 				break;
 			case 'L':
-				gotoxy(90,pos5+2);printf("%s", empresa.nome);
+				gotoxy(90,pos5+2);printf("%c %s", 175, empresa.nome);
 				pos5+=1;
 				break;
 			case 'C':
-				gotoxy(110,pos6+2);printf("%s", empresa.nome);
+				gotoxy(110,pos6+2);printf("%c %s", 175, empresa.nome);
 				pos6+=1;
 				break;				
 		}

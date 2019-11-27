@@ -2,7 +2,7 @@
 //Autores: Douglas Henrique de Souza Pereira|Joao Victor de Souza Portella.
 //Matriculas: UC19107076|UC19100100.
 //Instituicao de Ensino: Universidade Catolica de Brasilia.
-//Data: 20 de Novembro de 2019.
+//Data: 25 de Novembro de 2019.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -29,9 +29,7 @@ void stands();
 void stands_patrocinador();
 void organizar_cads();
 void sobre();
-void coloca_bordas();
 void copia_nome(char[], char);
-char leValidaStandPat();
 float maior_pat(char[]);
 //------ Funcoes conio---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void gotoxy(int x, int y){
@@ -253,7 +251,7 @@ void mostra_patrocinio(){
 	system("pause");
 	fclose(arq);
 }
-//-----------------------------------------------------------------------------------------------------------------------------------------
+//------ MOSTRAR NOME DOS STANDS ----------------------------------------------------------------------------------------------------------------------------------------
 void copia_nome(char nome[], char stand){
 	switch(stand){
 		case 'R':
@@ -321,6 +319,7 @@ void cad_participantes(int total_stands[]){
 	leValidaUsuario(user);
 	strcpy(participante.usuario, user);
 	participante.stand = leValidaStand();
+	participante.stand_patrocinador = participante.stand;
 	participante.deletado = ' ';
 	fwrite(&participante, sizeof(participante), 1, arqPAR);
 	fclose(arqPAR);
@@ -369,16 +368,18 @@ void alterar_dados_participante(){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
 		return;
 	}
+	//fread(&participante, sizeof(participante), 1, arqPAR);
 	do{
 		system("cls");
 		flag = 0;
+		rewind(arqPAR);
 		gotoxy(52,10);printf("ษอออออออออออออออออออออออออ%c", 187);
 		gotoxy(52,11);printf("บ USUARIO:                บ");
 		gotoxy(52,12);printf("ศอออออออออออออออออออออออออผ\n\t");
 		gotoxy(63,11);
 		fflush(stdin);
 		gets(user);
-		while(fread(&participante, sizeof(participante), 1, arqPAR) && participante.deletado != '*');
+		while(fread(&participante, sizeof(participante), 1, arqPAR) == 1 && strcmp(user, participante.usuario) != 0);
 		if(strcmp(user, participante.usuario) == 0){
 			mostra_participante(participante);
 			do{
@@ -472,6 +473,8 @@ void excluir_cadastro_participante(){
 					printf(R"\n\t\t\t\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!"B);
 					Sleep(200);
 				}
+				printf("\n\t-> %c", participante.deletado);
+				getch();
 			}while(flag == 1);
 			break;
 		case 7:
@@ -651,7 +654,6 @@ void estatisticas(){
 		}
 	}while(pos != 18);
 }
-//------ Mostrar o nome dos stands ----------------------------------------------------------------------------------------------------------------------------------------
 
 float maior_pat(char nome[]){
 	FILE *arqPAT = fopen("cad_patrocinadores.dat", "rb");
@@ -694,20 +696,22 @@ float maior_pat(char nome[]){
 	return maior;
 }
 
-void coloca_bordas(){
-	int i;
+void mostra_patrocinador_stand(){
+	FILE *arq = fopen("cad_patrocinadores.dat","rb");
+	patrocinadores empresa;
+	gamers participante;
+	char stand;
+	int pos = 10;
 	
-	gotoxy(2, 29);printf("Versao 1.0 %c Todos os direitos reservados.", 175, 175);
-	for(i = 0; i < 30; i++){
-		gotoxy(1,i);printf("บ");
-		gotoxy(120,i);printf("บ");
+	participante = acessar_dados_participante();
+	gotoxy(9,pos+1);printf("%c PATROCINADORES DO SEUS STAND", 254);
+	pos+=1;
+	while(fread(&empresa, sizeof(empresa), 1, arq)){
+		if(empresa.stand_escolhido == participante.stand){
+			gotoxy(9,pos+1);printf("%c %s",175, empresa.nome);
+			pos+=1;
+		}
 	}
-	gotoxy(1,30);printf("ศ");
-	gotoxy(120,30);printf("ผ");
-	for(i = 0; i < 120; i++){
-		gotoxy(i,1);printf("อ");
-		gotoxy(i,30);printf("อ");
-	}
-	gotoxy(1,1);printf("ษ");
-	gotoxy(120,1);printf("%c", 187);
+	getch();
+	fclose(arq);
 }

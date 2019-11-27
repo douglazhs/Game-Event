@@ -17,6 +17,7 @@ void excluir_cadastro_participante();
 void organizar_cads();
 gamers acessar_dados_participante();
 patrocinadores acessar_dados_patrocinador();
+void mostra_patrocinador_stand();
 // ------ MENU PARTICIPANTES ----------------------------------------------------------------------------------------------------------------------------------------------
 void menu_participantes(){
 	int opcao, pos = 10, total_stands[6];
@@ -31,11 +32,13 @@ void menu_participantes(){
 			printf("\n\t\t\t\t\t\tฬอออออออออออออออออออออออออออ%c", 185);
 			gotoxy(49,12);printf("บ    %c ACESSAR              บ", 254);
 			printf("\n\t\t\t\t\t\tฬอออออออออออออออออออออออออออ%c", 185);
-			gotoxy(49,14);printf("บ    %c ALTERAR DADOS        บ", 254);
+			gotoxy(49,14);printf("บ    %c VER PATROCINADORES   บ", 254);
 			printf("\n\t\t\t\t\t\tฬอออออออออออออออออออออออออออ%c", 185);
-			gotoxy(49,16);printf("บ    %c STANDS               บ", 254);
+			gotoxy(49,16);printf("บ    %c ALTERAR DADOS        บ", 254);
 			printf("\n\t\t\t\t\t\tฬอออออออออออออออออออออออออออ%c", 185);
-			gotoxy(49,18);printf("บ    %c VOLTAR AO INICIO     บ", 254);
+			gotoxy(49,18);printf("บ    %c STANDS               บ", 254);
+			printf("\n\t\t\t\t\t\tฬอออออออออออออออออออออออออออ%c", 185);
+			gotoxy(49,20);printf("บ    %c VOLTAR AO INICIO     บ", 254);
 			printf("\n\t\t\t\t\t\tศอออออออออออออออออออออออออออผ");
 			gotoxy(75, pos);printf(R"%c"B, 174);
 			tecla = getch();
@@ -43,20 +46,21 @@ void menu_participantes(){
 				pos += 2;
 			if(tecla == UP)
 				pos -= 2;
-			if(pos > 18)
+			if(pos > 20)
 				pos = 10;
 			if(pos < 10)
-				pos = 18;	
+				pos = 20;	
 		}while(tecla != ENTER);	
 		switch(pos){
 			case 10: cad_participantes(total_stands); break;
 			case 12: acessar_dados_participante(); break;
-			case 14: alterar_dados_participante(); break;
-			case 16: 
-					stands();
-					gotoxy(41,13);system("pause");
-					break;
-			case 18: main(); break;
+			case 14: mostra_patrocinador_stand(); break;
+			case 16: alterar_dados_participante(); break;	
+			case 18: 
+				stands();
+				gotoxy(41,13);system("pause");
+				break;
+			case 20:main(); break;
 		}
 	}while(pos != 18);
 	
