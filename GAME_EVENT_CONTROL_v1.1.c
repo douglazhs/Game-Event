@@ -2,7 +2,7 @@
 //Autores: Douglas Henrique de Souza Pereira|Joao Victor de Souza Portella.
 //Matriculas: UC19107076|UC19100100.
 //Instituicao de Ensino: Universidade Catolica de Brasilia.
-//Data: 25 de Novembro de 2019.
+//Data: 27 de Novembro de 2019.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -14,16 +14,17 @@
 #include "VALIDACOES.h"
 #include "STANDS.h"
 #include "MENUS.h"
-//------ Teclas para utilizar na funcao gotoxy() ---------------------------------------------------------------------------------------------------------------------------------------------
+//------ TECLAS PARA FUNCAO GOTOXY(X,Y) ---------------------------------------------------------------------------------------------------------------------------------------------
 #define ENTER 13
 #define UP 72
 #define DOWN 80
 #define RIGHT 77
 #define LEFT 75
 #define ESC 27
-#define R "\e[1;31m"
-#define B "\x1b[0m"
-#define G "\e[1;32m"
+//------ DEFINICAO DE CORES --------------------------------------------------------------------------------------------------------------------------------------------------------
+#define R "\e[1;31m" //Vermelho
+#define B "\x1b[0m"  //Branco
+#define G "\e[1;32m" //Verde
 //------ PROTOTIPOS -----------------------------------------------------------------------------------------------------------------------------------------------------
 void stands();
 void stands_patrocinador();
@@ -31,7 +32,7 @@ void organizar_cads();
 void sobre();
 void copia_nome(char[], char);
 float maior_pat(char[]);
-//------ Funcoes conio---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//------ FUNCOES CONIO ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void gotoxy(int x, int y){
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 }
@@ -143,14 +144,15 @@ patrocinadores acessar_dados_patrocinador(){
 				return empresa;
 			}
 		}
-		if(strcmp(email, empresa.email) > 0){
+		if(strcmp(email, empresa.email) != 0){
 			flag = 1;
-			printf("\n\tENDERECO DE EMAIL NAO CADASTRADO NO SISTEMA! TENTE NOVAMENTE!");
+			printf(R"\n\t\t\t\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!"B);
+			Sleep(500);
 		}
 	}while(flag == 1);
 	fclose(arqPAT);
 }
-//------- Mostra dados------------------------------------------------------------------------------------------------------------------------
+//------- MOSTRA DADOS ------------------------------------------------------------------------------------------------------------------------
 void mostra_patrocinador(patrocinadores empresa){
 	char nome[50];
 	
@@ -205,7 +207,7 @@ void mostra_participantes(){
 	system("cls");
 	printf("\n\t\t\t\t\t\tUSUARIOS CADASTRADOS NO SISTEMA");
 	printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ"); 
-	while((fread(&participante, sizeof(participante), 1, arq)) && (participante.deletado != '*')){
+	while(fread(&participante, sizeof(participante), 1, arq) && participante.deletado != '*'){
 		copia_nome(nome, participante.stand);
 		printf("\n\tษออออออออออออออออออออออออออออออ%c", 187);
 		printf("\n\tบ   %c USUARIO %c                บ", 254, 175);
@@ -249,6 +251,26 @@ void mostra_patrocinio(){
 	printf("\n\n\t%c PATROCINIO TOTAL %c R$%.2f", 254, 175, pat_total);
 	printf("\n\n\t");
 	system("pause");
+	fclose(arq);
+}
+
+void mostra_patrocinador_stand(){
+	FILE *arq = fopen("cad_patrocinadores.dat","rb");
+	patrocinadores empresa;
+	gamers participante;
+	char stand;
+	int pos = 10;
+	
+	participante = acessar_dados_participante();
+	gotoxy(9,pos+1);printf("%c PATROCINADORES DO SEU STAND", 254);
+	pos+=1;
+	while(fread(&empresa, sizeof(empresa), 1, arq)){
+		if(empresa.stand_escolhido == participante.stand){
+			gotoxy(9,pos+1);printf("%c %s",175, empresa.nome);
+			pos+=1;
+		}
+	}
+	getch();
 	fclose(arq);
 }
 //------ MOSTRAR NOME DOS STANDS ----------------------------------------------------------------------------------------------------------------------------------------
@@ -368,7 +390,6 @@ void alterar_dados_participante(){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");	
 		return;
 	}
-	//fread(&participante, sizeof(participante), 1, arqPAR);
 	do{
 		system("cls");
 		flag = 0;
@@ -421,8 +442,8 @@ void alterar_dados_participante(){
 
 //------ EXCLUIR CADASTRO DE PARTICIPANTE ---------------------------------------------------------------------------------------------------------------------------------------
 void excluir_cadastro_participante(){
-	int flag = 0, pos = 5;
-	char user[50], tecla;
+	int flag = 0, pos = 5, posX = 51;
+	char user[50], tecla, tecla2;
 	gamers participante;
 	FILE  *arqPAR = fopen("cad_participantes.dat", "ab+");
 	
@@ -439,7 +460,7 @@ void excluir_cadastro_participante(){
 		printf("\n\t\t\t\t\t    ฬออออออออออออออออออออออออออออออ%c", 185);
 		printf("\n\t\t\t\t\t    บ   %c ORGANIZAR CADASTROS      บ", 254);
 		printf("\n\t\t\t\t\t    ศออออออออออออออออออออออออออออออผ");
-		gotoxy(75, pos);printf("%c", 174);
+		gotoxy(75, pos);printf(R"%c"B, 174);
 		tecla = getch();
 		if(tecla == DOWN)
 			pos += 2;
@@ -461,27 +482,50 @@ void excluir_cadastro_participante(){
 				gotoxy(63,11);
 				fflush(stdin);
 				gets(user);
-				while(fread(&participante, sizeof(participante), 1, arqPAR));
+				while(fread(&participante, sizeof(participante), 1, arqPAR) && strcmp(user, participante.usuario) != 0);
 				if(strcmp(user, participante.usuario) == 0){
 					mostra_participante(participante);
-					participante.deletado = '*';
-					fseek(arqPAR, -sizeof(participante), SEEK_CUR);
-					fwrite(&participante, sizeof(participante), 1, arqPAR);
+					do{
+						system("cls");	
+						gotoxy(42,10);printf("TEM CERTEZA QUE DESEJA FAZER A EXCLUSAO?");
+						gotoxy(47,11);printf(G"SIM"B);
+						gotoxy(74,11);printf(R"NAO"B);
+						gotoxy(posX,11);printf(R"%c"B,174);
+						tecla2 = getch();
+						if(tecla2 == RIGHT)
+							posX+=27;
+						if(tecla2 == LEFT)
+							posX-=27;
+						if(posX > 78)
+							posX = 51;
+						if(posX < 51)
+							posX = 78;			
+					}while(tecla2 != ENTER);
+					switch(posX){
+						case 51:
+							participante.deletado = '*';
+							fseek(arqPAR, -sizeof(participante), SEEK_CUR);
+							fwrite(&participante, sizeof(participante), 1, arqPAR);
+							fseek(arqPAR, 0, SEEK_CUR);
+							printf(G"\n\n\t\t\t\t\t\tEXCLUSAO FEITA COM SUCESSO"B);
+							Sleep(700);
+							break;
+						case 78:
+							return;
+					}
+					
 				}
 				if(strcmp(user, participante.usuario) != 0){
 					flag = 1;
 					printf(R"\n\t\t\t\tUSUARIO NAO CADASTRADO NO SISTEMA, TENTE NOVAMENTE!"B);
 					Sleep(200);
 				}
-				printf("\n\t-> %c", participante.deletado);
-				getch();
 			}while(flag == 1);
 			break;
 		case 7:
 			organizar_cads();
 			break;
 	}
-	organizar_cads();	
 	fclose(arqPAR);
 }
 
@@ -494,14 +538,13 @@ void organizar_cads(){
 		printf("\n\tERRO AO ABRIR O ARQUIVO!");
 		return;
 	}
-	while(fread(&participante, sizeof(participante), 1, arq)){
-		if(participante.deletado != '*')
-			fwrite(&participante, sizeof(participante), 1, arq2);
+	while(fread(&participante, sizeof(participante), 1, arq) && participante.deletado != '*'){
+		fwrite(&participante, sizeof(participante), 1, arq2);
 	}
-	remove("cad_participantes.dat");
-	rename("cad_participantes.bak", "cad_participantes.dat");	
 	fclose(arq);
 	fclose(arq2);
+	remove("cad_participantes.dat");
+	rename("cad_participantes.bak", "cad_participantes.dat");	
 }	
 //------ SOBRE O EVENTO ---------------------------------------------------------------------------------------------------------------------------------------
 void sobre(){
@@ -694,24 +737,4 @@ float maior_pat(char nome[]){
 		strcpy(nome, "CORRIDA");
 	}
 	return maior;
-}
-
-void mostra_patrocinador_stand(){
-	FILE *arq = fopen("cad_patrocinadores.dat","rb");
-	patrocinadores empresa;
-	gamers participante;
-	char stand;
-	int pos = 10;
-	
-	participante = acessar_dados_participante();
-	gotoxy(9,pos+1);printf("%c PATROCINADORES DO SEUS STAND", 254);
-	pos+=1;
-	while(fread(&empresa, sizeof(empresa), 1, arq)){
-		if(empresa.stand_escolhido == participante.stand){
-			gotoxy(9,pos+1);printf("%c %s",175, empresa.nome);
-			pos+=1;
-		}
-	}
-	getch();
-	fclose(arq);
 }
