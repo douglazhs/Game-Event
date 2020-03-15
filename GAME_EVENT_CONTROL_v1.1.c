@@ -55,17 +55,17 @@ int main(void){
 		printf("\n\t\t\t\t\t    //   / / //        //    ) ) //    / /");  
 		printf("\n\t\t\t\t\t   ((___/ / ((____/ / //____/ / ((____/ /"B);    
 		printf("\n\n\n\n\t\t\t\t\t\t       %c O QUE VOCE E?", 254);
-		printf("\n\t\t\t\t\t\tษอออออออออออออออออออออออออออ%c", 187);
-		gotoxy(49,15);printf("บ    %c PARTICIPANTE         บ", 254);
-		printf("\n\t\t\t\t\t\tฬอออออออออออออออออออออออออออ%c", 185);
-		gotoxy(49,17);printf("บ    %c EMPRESA              บ", 254);
-		printf("\n\t\t\t\t\t\tฬอออออออออออออออออออออออออออ%c", 185);
-		gotoxy(49,19);printf("บ    %c PATROCINADOR         บ", 254);
-		printf("\n\t\t\t\t\t\tฬอออออออออออออออออออออออออออ%c", 185);
-		gotoxy(49,21);printf("บ    %c SOBRE O EVENTO       บ", 254);
-		printf("\n\t\t\t\t\t\tฬอออออออออออออออออออออออออออ%c", 185);
-		gotoxy(49,23);printf("บ    %c SAIR DO PROGRAMA     บ", 254);
-		printf("\n\t\t\t\t\t\tศอออออออออออออออออออออออออออผ");
+		printf("\n\t\t\t\t\t\tรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+		gotoxy(49,15);printf("ยบ    %c PARTICIPANTE         ยบ", 254);
+		printf("\n\t\t\t\t\t\tรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+		gotoxy(49,17);printf("ยบ    %c EMPRESA              ยบ", 254);
+		printf("\n\t\t\t\t\t\tรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+		gotoxy(49,19);printf("ยบ    %c PATROCINADOR         ยบ", 254);
+		printf("\n\t\t\t\t\t\tรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+		gotoxy(49,21);printf("ยบ    %c SOBRE O EVENTO       ยบ", 254);
+		printf("\n\t\t\t\t\t\tรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+		gotoxy(49,23);printf("ยบ    %c SAIR DO PROGRAMA     ยบ", 254);
+		printf("\n\t\t\t\t\t\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรยผ");
 		gotoxy(75, pos);printf(R"%c"B, 174);
 		tecla = getch();
 		if(tecla == DOWN)
@@ -101,9 +101,9 @@ gamers acessar_dados_participante(){
 		system("cls");
 		flag = 0;
 		rewind(arq);
-		gotoxy(52,10);printf("ษอออออออออออออออออออออออออ%c", 187);
-		gotoxy(52,11);printf("บ USUARIO:                บ");
-		gotoxy(52,12);printf("ศอออออออออออออออออออออออออผ\n\t");
+		gotoxy(52,10);printf("รรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+		gotoxy(52,11);printf("ยบ USUARIO:                ยบ");
+		gotoxy(52,12);printf("รรรรรรรรรรรรรรรรรรรรรรรรรรยผ\n\t");
 		gotoxy(63,11);
 		fflush(stdin);
 		gets(user);
@@ -132,9 +132,9 @@ patrocinadores acessar_dados_patrocinador(){
 		system("cls");
 		flag = 0;
 		rewind(arqPAT);
-		gotoxy(52,10);printf("ษอออออออออออออออออออออออออ%c", 187);
-		gotoxy(52,11);printf("บ EMAIL:                  บ");
-		gotoxy(52,12);printf("ศอออออออออออออออออออออออออผ\n\t");
+		gotoxy(52,10);printf("รรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+		gotoxy(52,11);printf("ยบ EMAIL:                  ยบ");
+		gotoxy(52,12);printf("รรรรรรรรรรรรรรรรรรรรรรรรรรยผ\n\t");
 		gotoxy(60,11);
 		fflush(stdin);
 		gets(email);
@@ -158,15 +158,15 @@ void mostra_patrocinador(patrocinadores empresa){
 	
 	system("cls");
 	copia_nome(nome, empresa.stand_escolhido);
-	printf("\n\tษออออออออออออออออออออออออออออออ%c", 187);
-	printf("\n\tบ   %c NOME %c                   บ", 254, 175);
-	printf("\n\tฬออออออออออออออออออออออออออออออ%c", 185);
-	printf("\n\tบ   %c EMAIL %c                  บ", 254, 175);
-	printf("\n\tฬออออออออออออออออออออออออออออออ%c", 185);
-	printf("\n\tบ   %c STAND %c                  บ", 254, 175);
-	printf("\n\tฬออออออออออออออออออออออออออออออ%c", 185);
-	printf("\n\tบ   %c PATROCINIO %c             บ", 254, 175);
-	printf("\n\tศออออออออออออออออออออออออออออออผ");
+	printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+	printf("\n\tยบ   %c NOME %c                   ยบ", 254, 175);
+	printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+	printf("\n\tยบ   %c EMAIL %c                  ยบ", 254, 175);
+	printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+	printf("\n\tยบ   %c STAND %c                  ยบ", 254, 175);
+	printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+	printf("\n\tยบ   %c PATROCINIO %c             ยบ", 254, 175);
+	printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรยผ");
 	gotoxy(22,3);printf("%s", empresa.nome);
 	gotoxy(23,5);printf("%s", empresa.email);
 	gotoxy(23,7);printf(nome);
@@ -180,13 +180,13 @@ void mostra_participante(gamers participante){
 	
 	copia_nome(nome, participante.stand);
 	system("cls");
-	printf("\n\tษออออออออออออออออออออออออออออออ%c", 187);
-	printf("\n\tบ   %c USUARIO %c                บ", 254, 175);
-	printf("\n\tฬออออออออออออออออออออออออออออออ%c", 185);
-	printf("\n\tบ   %c NOME %c                   บ", 254, 175);
-	printf("\n\tฬออออออออออออออออออออออออออออออ%c", 185);
-	printf("\n\tบ   %c STAND %c                  บ", 254, 175);
-	printf("\n\tศออออออออออออออออออออออออออออออผ");
+	printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+	printf("\n\tยบ   %c USUARIO %c                ยบ", 254, 175);
+	printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+	printf("\n\tยบ   %c NOME %c                   ยบ", 254, 175);
+	printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+	printf("\n\tยบ   %c STAND %c                  ยบ", 254, 175);
+	printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรยผ");
 	gotoxy(25,3);printf("%s", participante.usuario);
 	gotoxy(23,5);printf("%s", participante.nome);
 	gotoxy(23,7);printf("%s", nome);
@@ -206,16 +206,16 @@ void mostra_participantes(){
 	}
 	system("cls");
 	printf("\n\t\t\t\t\t\tUSUARIOS CADASTRADOS NO SISTEMA");
-	printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ"); 
+	printf("\nรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร"); 
 	while(fread(&participante, sizeof(participante), 1, arq) && participante.deletado != '*'){
 		copia_nome(nome, participante.stand);
-		printf("\n\tษออออออออออออออออออออออออออออออ%c", 187);
-		printf("\n\tบ   %c USUARIO %c                บ", 254, 175);
-		printf("\n\tฬออออออออออออออออออออออออออออออ%c", 185);
-		printf("\n\tบ   %c NOME %c                   บ", 254, 175);
-		printf("\n\tฬออออออออออออออออออออออออออออออ%c", 185);
-		printf("\n\tบ   %c STAND %c                  บ", 254, 175);
-		printf("\n\tศออออออออออออออออออออออออออออออผ");
+		printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+		printf("\n\tยบ   %c USUARIO %c                ยบ", 254, 175);
+		printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+		printf("\n\tยบ   %c NOME %c                   ยบ", 254, 175);
+		printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+		printf("\n\tยบ   %c STAND %c                  ยบ", 254, 175);
+		printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรยผ");
 		gotoxy(25,pos);printf("%s", participante.usuario);
 		gotoxy(22,pos+2);printf("%s", participante.nome);
 		gotoxy(23,pos+4);printf("%s", nome);
@@ -235,13 +235,13 @@ void mostra_patrocinio(){
 	
 	system("cls");
 	printf("\n\t\t\t\t\t\t\tPATROCINIOS\n");
-	printf("ออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ");
+	printf("รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร");
 	while(fread(&empresa, sizeof(empresa), 1, arq)){
-		printf("\n\tษออออออออออออออออออออออออออออออ%c", 187);
-		printf("\n\tบ   %c NOME %c                   บ", 254, 175);
-		printf("\n\tฬออออออออออออออออออออออออออออออ%c", 185);
-		printf("\n\tบ   %c PATROCINIO %c             บ", 254, 175);
-		printf("\n\tศออออออออออออออออออออออออออออออผ");
+		printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+		printf("\n\tยบ   %c NOME %c                   ยบ", 254, 175);
+		printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+		printf("\n\tยบ   %c PATROCINIO %c             ยบ", 254, 175);
+		printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรยผ");
 		gotoxy(22,pos);printf("%s", empresa.nome);
 		gotoxy(28,pos+2);printf("R$%.2f", empresa.quantia);
 		printf("\n");
@@ -308,7 +308,7 @@ void cad_patrocinadores(){
 	}
 	system("cls");
 	printf("\n\t\t\t\t\t\t\tCADASTRO DE PATROCINADOR");
-	printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ");
+	printf("\nรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร");
 	printf("\n\t%c NOME DA EMPRESA %c ", 254, 175);
 	fflush(stdin);
 	leValidaNome(empresa.nome);
@@ -334,7 +334,7 @@ void cad_participantes(int total_stands[]){
 		return;
 	}
 	printf("\n\t\t\t\t\t\t\tCADASTRO DE PARTICIPANTES");
-	printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ");
+	printf("\nรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร");
 	printf("\n\t%c BEM-VINDO, GAMER. DIGITE SEU NOME %c ", 254, 175);
 	leValidaNome(participante.nome);
 	printf("\n\tOLA, %s.", participante.nome);
@@ -364,7 +364,7 @@ void cad_empresas(){
 	}
 	system("cls");
 	printf("\n\t\t\t\t\t\t  CADASTRO DE ORGANIZADOR");
-	printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ"); 
+	printf("\nรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร"); 
 	printf("\n\t%c NOME DA EMPRESA ORGANIZADORA %c ", 254, 175);
 	fflush(stdin);
 	leValidaNome(empresa.nome);
@@ -394,9 +394,9 @@ void alterar_dados_participante(){
 		system("cls");
 		flag = 0;
 		rewind(arqPAR);
-		gotoxy(52,10);printf("ษอออออออออออออออออออออออออ%c", 187);
-		gotoxy(52,11);printf("บ USUARIO:                บ");
-		gotoxy(52,12);printf("ศอออออออออออออออออออออออออผ\n\t");
+		gotoxy(52,10);printf("รรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+		gotoxy(52,11);printf("ยบ USUARIO:                ยบ");
+		gotoxy(52,12);printf("รรรรรรรรรรรรรรรรรรรรรรรรรรยผ\n\t");
 		gotoxy(63,11);
 		fflush(stdin);
 		gets(user);
@@ -454,12 +454,12 @@ void excluir_cadastro_participante(){
 	do{
 		system("cls");
 		printf("\n\t\t\t\t\t        EXCLUSAO DE CADASTROS");
-		printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ");
-		printf("\n\t\t\t\t\t    ษออออออออออออออออออออออออออออออ%c", 187);
-		printf("\n\t\t\t\t\t    บ   %c EXCLUIR PARTICIPANTE     บ", 254);
-		printf("\n\t\t\t\t\t    ฬออออออออออออออออออออออออออออออ%c", 185);
-		printf("\n\t\t\t\t\t    บ   %c ORGANIZAR CADASTROS      บ", 254);
-		printf("\n\t\t\t\t\t    ศออออออออออออออออออออออออออออออผ");
+		printf("\nรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร");
+		printf("\n\t\t\t\t\t    รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+		printf("\n\t\t\t\t\t    ยบ   %c EXCLUIR PARTICIPANTE     ยบ", 254);
+		printf("\n\t\t\t\t\t    รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+		printf("\n\t\t\t\t\t    ยบ   %c ORGANIZAR CADASTROS      ยบ", 254);
+		printf("\n\t\t\t\t\t    รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรยผ");
 		gotoxy(75, pos);printf(R"%c"B, 174);
 		tecla = getch();
 		if(tecla == DOWN)
@@ -476,9 +476,9 @@ void excluir_cadastro_participante(){
 			do{
 				system("cls");
 				flag = 0;
-				gotoxy(52,10);printf("ษอออออออออออออออออออออออออ%c", 187);
-				gotoxy(52,11);printf("บ USUARIO:                บ");
-				gotoxy(52,12);printf("ศอออออออออออออออออออออออออผ\n\t");
+				gotoxy(52,10);printf("รรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+				gotoxy(52,11);printf("ยบ USUARIO:                ยบ");
+				gotoxy(52,12);printf("รรรรรรรรรรรรรรรรรรรรรรรรรรยผ\n\t");
 				gotoxy(63,11);
 				fflush(stdin);
 				gets(user);
@@ -550,7 +550,7 @@ void organizar_cads(){
 void sobre(){
 	system("cls");
 	printf("\n\t\t\t\t\t\t\tSOBRE O EVENTO");
-	printf("\nออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ"); 
+	printf("\nรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร"); 
 	printf("\n\t%c EVENTO DE GAMES PARA A COMUNIDADE DE ALUNOS DA UCB E ENTORNO.\n", 254);
 	printf("\n\t%c QUALQUER ALUNO DE QUALQUER CURSO PODE PARTICIPAR.\n", 254);
 	printf("\n\t%c OS PATROCINADORES PODEM SE CADASTRAR E ANALISAREMOS O CADASTRO.\n", 254);
@@ -599,17 +599,17 @@ void estatisticas(){
 	do{
 		do{
 			system("cls");
-			gotoxy(45,9);printf("ษอออออออออออออออออออออออออออออออออออออออ%c", 187);
-			gotoxy(45,10);printf("บ    %c TOTAL DE PARTICIPANTES           บ", 254);
-			gotoxy(45,11);printf("ฬอออออออออออออออออออออออออออออออออออออออ%c", 185);
-			gotoxy(45,12);printf("บ    %c PORCENTAGEM DE CADA STAND        บ", 254);
-			gotoxy(45,13);printf("ฬอออออออออออออออออออออออออออออออออออออออ%c", 185);
-			gotoxy(45,14);printf("บ    %c MAIOR ADESAO                     บ", 254);
-			gotoxy(45,15);printf("ฬอออออออออออออออออออออออออออออออออออออออ%c", 185);
-			gotoxy(45,16);printf("บ    %c STAND COM MAIOR PATROCINIO       บ", 254);
-			gotoxy(45,17);printf("ฬอออออออออออออออออออออออออออออออออออออออ%c", 185);
-			gotoxy(45,18);printf("บ    %c VOLTAR AO MENU DO ORGANIZADOR    บ", 254);
-			gotoxy(45,19);printf("ศอออออออออออออออออออออออออออออออออออออออผ");
+			gotoxy(45,9);printf("รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+			gotoxy(45,10);printf("ยบ    %c TOTAL DE PARTICIPANTES           ยบ", 254);
+			gotoxy(45,11);printf("รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+			gotoxy(45,12);printf("ยบ    %c PORCENTAGEM DE CADA STAND        ยบ", 254);
+			gotoxy(45,13);printf("รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+			gotoxy(45,14);printf("ยบ    %c MAIOR ADESAO                     ยบ", 254);
+			gotoxy(45,15);printf("รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+			gotoxy(45,16);printf("ยบ    %c STAND COM MAIOR PATROCINIO       ยบ", 254);
+			gotoxy(45,17);printf("รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+			gotoxy(45,18);printf("ยบ    %c VOLTAR AO MENU DO ORGANIZADOR    ยบ", 254);
+			gotoxy(45,19);printf("รรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรยผ");
 			gotoxy(82, pos);printf(R"%c"B, 174);
 			tecla = getch();
 			if(tecla == DOWN)
@@ -624,37 +624,37 @@ void estatisticas(){
 		switch(pos){
 			case 10:
 				system("cls");
-				printf("\n\tษอออออออออออออออออออออออออออออออออออออออออออ%c", 187);
-				printf("\n\tบ   TOTAL DE PARTICIPANTES DO EVENTO %c  %d   บ", 175, total);
-				printf("\n\tศอออออออออออออออออออออออออออออออออออออออออออผ\n\t");
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+				printf("\n\tยบ   TOTAL DE PARTICIPANTES DO EVENTO %c  %d   ยบ", 175, total);
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรยผ\n\t");
 				system("pause");
 				break;
 			case 12:
 				system("cls");
-				printf("\n\tษอออออออออหอออออออออออออออ%c", 187);
-				printf("\n\tบGENERO   บ PORCENTAGEM   บ");
-				printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
-				printf("\n\tบRPG      บ %8.2f      บ", p1 = (totalR*100)/max);
-				printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
-				printf("\n\tบFPS      บ %8.2f      บ", p2 = (totalF*100)/max);
-				printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
-				printf("\n\tบESPORTES บ %8.2f      บ", p3 = (totalE*100)/max);
-				printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
-				printf("\n\tบAVENTURA บ %8.2f      บ", p4 = (totalA*100)/max);
-				printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
-				printf("\n\tบCORRIDA  บ %8.2f      บ", p5 = (totalC*100)/max);
-				printf("\n\tฬอออออออออฮอออออออออออออออ%c", 185);
-				printf("\n\tบLUTA     บ %8.2f      บ", p6 = (totalL*100)/max);
-				printf("\n\tศอออออออออสอออออออออออออออผ\n\t");
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+				printf("\n\tยบGENERO   ยบ PORCENTAGEM   ยบ");
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+				printf("\n\tยบRPG      ยบ %8.2f      ยบ", p1 = (totalR*100)/max);
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+				printf("\n\tยบFPS      ยบ %8.2f      ยบ", p2 = (totalF*100)/max);
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+				printf("\n\tยบESPORTES ยบ %8.2f      ยบ", p3 = (totalE*100)/max);
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+				printf("\n\tยบAVENTURA ยบ %8.2f      ยบ", p4 = (totalA*100)/max);
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+				printf("\n\tยบCORRIDA  ยบ %8.2f      ยบ", p5 = (totalC*100)/max);
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+				printf("\n\tยบLUTA     ยบ %8.2f      ยบ", p6 = (totalL*100)/max);
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรยผ\n\t");
 				system("pause");
 				break;
 			case 14:
 				system("cls");
-				printf("\n\tษอออออออออออออออออออออออออออออออออ%c", 187);
-				printf("\n\tบ %c MAIS RENTAVEL %c               บ", 254, 175);
-				printf("\n\tฬอออออออออออออออออออออออออออออออออ%c", 185);
-				printf("\n\tบ %c N. DE PARTICIPANTES %c         บ", 254, 175);
-				printf("\n\tศอออออออออออออออออออออออออออออออออผ");
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+				printf("\n\tยบ %c MAIS RENTAVEL %c               ยบ", 254, 175);
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+				printf("\n\tยบ %c N. DE PARTICIPANTES %c         ยบ", 254, 175);
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรยผ");
 				if(totalR > totalF && totalR > totalE && totalR > totalA && totalR > totalC && totalR > totalL){
 					gotoxy(29,3);printf("RPG");
 					gotoxy(35,5);printf("%d",totalR);
@@ -680,11 +680,11 @@ void estatisticas(){
 			case 16:
 				maior_patrocinio = maior_pat(nome_maior_pat);
 				system("cls");
-				printf("\n\tษออออออออออออออออออออออออออออออ%c", 187);
-				printf("\n\tบ   %c PATROCINIO %c             บ", 254, 175);
-				printf("\n\tฬออออออออออออออออออออออออออออออ%c", 185);
-				printf("\n\tบ   %c STAND %c                  บ", 254, 175);
-				printf("\n\tศออออออออออออออออออออออออออออออผ");
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 187);
+				printf("\n\tยบ   %c PATROCINIO %c             ยบ", 254, 175);
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรร%c", 185);
+				printf("\n\tยบ   %c STAND %c                  ยบ", 254, 175);
+				printf("\n\tรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรรยผ");
 				gotoxy(28,3);printf("%.2f", maior_patrocinio);
 				gotoxy(23,5);printf("%s", nome_maior_pat);
 				printf("\n\n\t");
